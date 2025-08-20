@@ -1,0 +1,24 @@
+[project]
+name = "p1gen"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Juliet Nwagwu Ume-Ezeoke", email = "jnwagwu@stanford.edu" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "eppy>=0.5.63",
+    "geomeppy>=0.11.8",
+    "polars>=1.32.3",
+    "pyprojroot>=0.3.0",
+    "replan2eplus==0.1.*",
+    "utils4plans>=0.1.6",
+]
+
+[project.scripts]
+p1gen = "p1gen:main"
+
+[build-system]
+requires = ["uv_build>=0.8.3,<0.9.0"]
+build-backend = "uv_build"

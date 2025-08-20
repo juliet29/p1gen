@@ -1,0 +1,23 @@
+static/_03_models/** 
+!static/_03_models/
+!static/_03_models/**/eplusout.sql
+!static/_03_models/**/out.idf
+
+
+*.html
+
+
+*.pickle
+*.pkl
+
+*.env
+.venv
+
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.log
+.DS_Store
