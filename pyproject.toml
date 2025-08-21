@@ -19,6 +19,7 @@ dependencies = [
     "pyprojroot>=0.3.0",
     "replan2eplus==0.1.*",
     "utils4plans>=0.1.6",
+    "vl-convert-python>=1.8.0",
 ]
 
 [project.scripts]

@@ -7,6 +7,12 @@ from p1gen.data_helpers import create_dataframe_for_case
 from p1gen.data_helpers import DFC
 import altair as alt
 import polars as pl
+from pathlib import Path
+
+
+class Labels:
+    NET_HEAT_EXCHANGE = "AFN Zone Net Heat Exchange Rate [W]"
+    MIXVENT_VOLUME = "AFN Zone Volume [m3]"  #  averaged over time step
 
 
 class QOI:
@@ -41,9 +47,9 @@ class CalcQOI:
     NET_FLOW = "AFN Linkage Net Volume Flow Rate"
 
 
-def prep_case():
-    case = read_idf(test_case)
-    sql_results = get_sql_results(test_case)
+def prep_case(path:Path):
+    case = read_idf(path)
+    sql_results = get_sql_results(path)
     return case, sql_results
 
 
@@ -51,8 +57,7 @@ def print_spaces(df: pl.DataFrame):
     print(df[DFC.SPACE_NAMES].unique().to_list())
 
 
-def prep_heat_df():
-    case, sql = prep_case()
+def prep_heat_df(case, sql):
     heat_rate_df = (
         create_dataframe_for_case(
             sql,
@@ -87,12 +92,10 @@ def prep_heat_df():
             index=[DFC.SPACE_NAMES, DFC.DATETIMES],
         )
     )
-    print(heat_rate_df)
     return heat_rate_df
 
 
-def prep_vol_df():
-    case, sql = prep_case()
+def prep_vol_df(case, sql):
     vol_df = (
         create_dataframe_for_case(sql, [QOI.MIX_VOL, QOI.VENT_VOL], case)
         .unpivot(
@@ -101,42 +104,40 @@ def prep_vol_df():
         )
         .fill_null("zero")
     )
-
-    # collections = create_collections_for_variable(sql, QOI.MIX_VOL)
-
-    # TODO can do the opposte -> set a flag
-    # valid_collections = [i for i in collections if i.space_name in case.geom_names]
-
-    # filter zones where all values are 0..
-    print(vol_df)
     return vol_df
 
 
-def plot_mix_volume_by_room():
-    vol_df = prep_heat_df() #prep_vol_df()
+def plot_by_zone(df: pl.DataFrame, ytitle: str):
     # TODO verify the schema
     chart = (
-        alt.Chart(vol_df)
+        alt.Chart(df)
         .mark_line()
         .encode(
-            x=f"{DFC.DATETIMES}:T",
-            y=f"{DFC.VALUE}:Q",
+            x=alt.X(f"{DFC.DATETIMES}:T").title("Time").sort("ascending"),
+            y=alt.Y(f"{DFC.VALUE}:Q").title(ytitle),
             color=f"{DFC.SPACE_NAMES}:N",
             strokeDash=alt.StrokeDash(f"{DFC.VARIABLE}:N"),
         )
         .facet(column=f"{DFC.SPACE_NAMES}:N")
     )
 
-    # .sort(order=[QOI.VENT_VOL, QOI.MIX_VOL]),
-    # heat_chart = alt.Chart(vol_df).mark_line().encode(
-    #     x=f'{DFC.DATETIMES}:T',
-    #     y=f'{CalcQOI.MIX_NET_HET_RATE}:Q',
-    #     color=f'{DFC.SPACE_NAMES}:N'
-    # )
-
-    # chart = alt.layer(mix_chart)
-
     chart.show()
+
+    return chart
+
+
+def make_plots_by_zone(path: Path):
+    case, sql = prep_case(path)
+    heat_df = prep_heat_df(case, sql)
+    vol_df = prep_vol_df(case, sql)
+
+    vol_chart = plot_by_zone(vol_df, Labels.MIXVENT_VOLUME).properties(title=path.name)
+
+    heat_chart = plot_by_zone(heat_df, Labels.NET_HEAT_EXCHANGE).properties(
+        title=path.name
+    )
+
+    return vol_chart, heat_chart
 
 
 if __name__ == "__main__":
@@ -145,28 +146,4 @@ if __name__ == "__main__":
     HTML = "html"
     alt.renderers.enable(BROWSER)
     # prep_vol_df()
-    #prep_heat_df()
-    plot_mix_volume_by_room()
-    # case = read_idf(test_case)
-    # sql_results = get_sql_results(test_case)
-    # flow_df = create_dataframe_for_case(sql_results, [QOI.FLOW_12, QOI.FLOW_21], case)
-    # # p = flow_df.to_pandas()
-    # unique_spaces = flow_df[DFC.SPACE_NAMES].unique()
-    # print(unique_spaces.to_list())
-    # print(flow_df)
-    # pass
-
-    # print(vol_df)
-
-    # pressure_df = create_dataframe_for_case(sql_results, [QOI.NODE_PRESSURE], case)
-    # print(pressure_df)
-    # create_geom_plot(case)
-
-
-# if is exterior -> then goes to direction
-# other wise goes to its nb..
-
-# maybe the appending data shuld be an after thing??
-# space name | zone name | neighbor: direction or zone
-# where to put arrow depends on net differemce..
-# addiing arrows to lines in mpl? + adjusting thickness.?
+    # prep_heat_df()
