@@ -18,16 +18,20 @@ from p1gen.utils import CurrCase
 from p1gen.utils import get_zone_by_name, get_surface_by_name, get_surface_or_subsuface_by_name
 
 
-class DFC(StrEnum):
+# class DFC(StrEnum):
+
+class DFC:
     """Dataframe Columns"""
+    CASE_NAMES = "case_names"
+    SPACE_NAMES = "space_names"
+
+    DATETIMES = "datetimes"
+    HOUR = "hour"
+    TIME = "time"
 
     ZONE = "zone"
     DIRECTION = "direction"
     IS_EXTERIOR = "is_exterior"
-    CASE_NAMES = "case_names"
-    SPACE_NAMES = "space_names"
-    DATETIMES = "datetimes"
-
 
 def extend_data(val, len_data):
     return [val] * len_data
@@ -37,9 +41,9 @@ def add_space_name_details(
     geom: Zone | Surface | Subsurface, _data_dict: dict[str, list], len_data: int
 ):
     def handle_surface(surf):
-        data_dict[DFC.DIRECTION.value] = extend_data(surf.direction.name, len_data)
+        data_dict[DFC.DIRECTION] = extend_data(surf.direction.name, len_data)
         is_exterior = surf.boundary_condition == "outdoors"
-        data_dict[DFC.IS_EXTERIOR.value] = extend_data(is_exterior, len_data)
+        data_dict[DFC.IS_EXTERIOR] = extend_data(is_exterior, len_data)
         return data_dict
 
     data_dict = deepcopy(_data_dict)
@@ -49,7 +53,7 @@ def add_space_name_details(
         return handle_surface(geom.surface)
 
     # its a zone 
-    data_dict[DFC.ZONE.value] = extend_data(geom.zone_name, len_data)
+    data_dict[DFC.ZONE] = extend_data(geom.zone_name, len_data)
     return data_dict
 
 
@@ -95,14 +99,14 @@ def create_long_dataframe(
     data_dict: dict[str, list] = {}
 
     if case.case_name:
-        data_dict[DFC.CASE_NAMES.value] = extend_data(case.case_name, len_data)
+        data_dict[DFC.CASE_NAMES] = extend_data(case.case_name, len_data)
 
-    data_dict[DFC.SPACE_NAMES.value] = extend_data(collection.space_name, len_data)
+    data_dict[DFC.SPACE_NAMES] = extend_data(collection.space_name, len_data)
 
     if collection.space_type != SpaceTypes.SITE:
         data_dict = handle_add_space_name_details(collection, data_dict, case)
 
-    data_dict[DFC.DATETIMES.value] = list(collection.datetimes)
+    data_dict[DFC.DATETIMES] = list(collection.datetimes)
 
     return pl.DataFrame(data_dict).with_columns(
         pl.Series(name=collection.qoi, values=collection.values)
@@ -117,7 +121,9 @@ def dataframe_for_qoi(
     collections = create_collections_for_variable(sql, qoi)
     # TODO can do the opposte -> set a flag 
     valid_collections = [i for i in collections if i.space_name in case.geom_names]
-    dataframes = [create_long_dataframe(collection, case) for collection in valid_collections]
+    non_zero_collections = [i for i in valid_collections if any(i.values)]
+
+    dataframes = [create_long_dataframe(collection, case) for collection in non_zero_collections]
     # split dataframes based on their shape.. 
     df1 = pl.concat(dataframes, how="vertical_relaxed")
     return df1

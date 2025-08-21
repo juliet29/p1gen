@@ -47,11 +47,17 @@ def get_surface_or_subsuface_by_name(name: str, objects: list[Subsurface | Surfa
 class CurrCase(ExistCase):
     case_name: str = ""
     @property
+    def zone_names(self):
+        return  [i.zone_name.upper() for i in self.zones]
+    
+    @property
+    def subsurface_names(self):
+        return [i.subsurface_name.upper() for i in self.subsurfaces]
+    
+    @property
     def geom_names(self):
-        zones = [i.zone_name for i in self.zones]
         surfaces = [i.surface_name for i in self.surfaces]
-        subsurfaces = [i.subsurface_name for i in self.subsurfaces]
-        return [i.upper() for i in zones + surfaces +  subsurfaces]
+        return [i.upper() for i in self.zone_names + surfaces +  self.subsurface_names]
 
 
 def read_idf(path_to_case: Path):

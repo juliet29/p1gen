@@ -16,7 +16,7 @@ OPENING = "AIRFLOWNETWORK:MULTIZONE:COMPONENT:SIMPLEOPENING"
 DOOR = "Door"
 WINDOW = "Window"
 
-Color = Literal["navy", "deepskyblue", "gray", "snow", "saddlebrown"]
+Color = Literal["navy", "deepskyblue", "gray", "snow", "saddlebrown", "white", "black"]
 LineStyle = Literal[
     "-",
     "--",
@@ -30,8 +30,8 @@ def prep_plot_surface_2d(
     color: Color,
     label="",
     linestyle: LineStyle = "-",
-    linweidth=3,
-    gapcolor="gray",
+    linweidth=1,
+    gapcolor:Color="white",
 ):
     line2Ds = []
     for ix, item in enumerate(items):
@@ -59,7 +59,7 @@ class SurfacePlots:
     @property
     def prep_non_afn_surfaces(self):
         return prep_plot_surface_2d(
-            self.non_afn_surfaces, "gray", "Not in Airflow Network"
+            self.non_afn_surfaces, "gray", "Not in Airflow Network", linestyle="-"
         )
 
     @property
@@ -73,7 +73,7 @@ class SurfacePlots:
     @property
     def prep_airboundaries(self):
         return prep_plot_surface_2d(
-            self.air_boundaries, "snow", "AirBoundary", ":", linweidth=1
+            self.air_boundaries, "snow", "AirBoundary", ":", linweidth=1, gapcolor="gray"
         )
 
     @property

@@ -11,7 +11,7 @@ static_paths = StaticPaths("", BASE_PATH) #TODO can extend static paths if like.
 
 
 MATERIALS_EXP = static_paths.models / "material_exp"
-test_case = MATERIALS_EXP / "Medium_case_red_b1" #"Medium_case_amb_b1"
+test_case = MATERIALS_EXP / "Medium_case_bol_5" #"Medium_case_amb_b1"
 
 
 IDF_NAME = "out.idf"
