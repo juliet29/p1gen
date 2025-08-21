@@ -33,6 +33,10 @@ class DFC:
     DIRECTION = "direction"
     IS_EXTERIOR = "is_exterior"
 
+    # after pivoting for altair 
+    VARIABLE = "variable"
+    VALUE = "value"
+
 def extend_data(val, len_data):
     return [val] * len_data
 
