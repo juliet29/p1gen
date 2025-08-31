@@ -16,6 +16,7 @@ dependencies = [
     "pandas>=2.3.1",
     "polars>=1.32.3",
     "pyarrow>=21.0.0",
+    "pydantic>=2.11.7",
     "pyprojroot>=0.3.0",
     "replan2eplus==0.1.*",
     "utils4plans>=0.1.6",
