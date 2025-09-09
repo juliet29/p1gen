@@ -31,11 +31,20 @@ class PlanPaths:
 
     PLAN_JSON_NAME = "plan"
     EDGES_NAME = "graph"
-    SUBSURFACES_NAME = "subsurfaces"
+    DESIGN_DETAILS_NAME = "subsurfaces"
 
     @property
     def plan(self):
         return read_json(self.path_to_case, self.PLAN_JSON_NAME)
+
+    @property
+    def edges(self):
+        return read_json(self.path_to_case, self.EDGES_NAME)
+
+    @property
+    def design_details(self):
+        return read_json(self.path_to_case, self.DESIGN_DETAILS_NAME)
+
 
 test_plan_paths = PlanPaths(test_plan)
 

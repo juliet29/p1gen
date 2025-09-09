@@ -1,5 +1,5 @@
 from replan2eplus.visuals.base_plot import BasePlot
-from replan2eplus.visuals.calcs import domain_to_mpl_patch, subsurface_connection
+# from replan2eplus.visuals.calcs import domain_to_mpl_patch, subsurface_connection
 from typing import Any, NamedTuple
 from p1gen.axtest import flow_colorbar, pressure_colorbar
 from p1gen.conntest import create_connection_patch
@@ -95,7 +95,7 @@ class DataPlot(BasePlot):
             )
         return self
 
-    def plot_zone_names(
+    def plot_zone_names2(
         self,
         fontsize=annotation_font_size,
     ):
@@ -170,7 +170,7 @@ def plot_noon_data(path):
     afn_openings = get_afn_opening_names(case.idf.idf)
     surface_lines = organize_subsurfaces(case.subsurfaces, case.surfaces, afn_openings)
 
-    bp.plot_cardinal().plot_zone_names()  # .plot_connections(surface_lines.afn_surfaces)
+    bp.plot_cardinal().plot_zone_names2()  # .plot_connections(surface_lines.afn_surfaces)
 
     for line in surface_lines.all_lines:
         bp.axes.add_artist(line)
