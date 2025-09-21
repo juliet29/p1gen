@@ -22,7 +22,12 @@ PATH_TO_SQL_SUBPATH = "results/eplusout.sql"
 
 ## reading in plans
 SVG2PLANS = static_paths.plans / "svg2plan_outputs_p1gen"
-test_plan = SVG2PLANS / "case_amb_b1"
+test_plan = SVG2PLANS / "case_bol_5"
+# test_plan = SVG2PLANS / "case_red_b1"
+# test_plan = SVG2PLANS / "case_amb_b1"
+
+
+THROWAWAY_PATH = BASE_PATH / "throwaway"
 
 
 @dataclass
@@ -46,7 +51,7 @@ class PlanPaths:
         return read_json(self.path_to_case, self.DESIGN_DETAILS_NAME)
 
 
-test_plan_paths = PlanPaths(test_plan)
+path_to_test_plan = PlanPaths(test_plan)
 
 if __name__ == "__main__":
     print(MATERIALS_EXP)

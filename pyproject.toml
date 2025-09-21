@@ -4,11 +4,17 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
-    { name = "Juliet Nwagwu Ume-Ezeoke", email = "jnwagwu@stanford.edu" }
+    { name = "Juliet Nwagwu Ume-Ezeoke", email = "jnwagwu@stanford.edu" },
 ]
+
+
+
 requires-python = ">=3.13"
+
+
 dependencies = [
     "altair>=5.5.0",
+    "bidict>=0.23.1",
     "eppy>=0.5.63",
     "geomeppy>=0.11.8",
     "ipython>=9.4.0",
@@ -18,10 +24,14 @@ dependencies = [
     "pyarrow>=21.0.0",
     "pydantic>=2.11.7",
     "pyprojroot>=0.3.0",
-    "replan2eplus==0.1.*",
     "utils4plans>=0.1.6",
     "vl-convert-python>=1.8.0",
+    "loguru>=0.7.3",
+    "replan2eplus",
 ]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [project.scripts]
 p1gen = "p1gen:main"
@@ -29,3 +39,6 @@ p1gen = "p1gen:main"
 [build-system]
 requires = ["uv_build>=0.8.3,<0.9.0"]
 build-backend = "uv_build"
+
+[tool.uv.sources]
+replan2eplus = { path = "../../replan2eplus" }

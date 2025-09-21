@@ -20,7 +20,7 @@
   ],
   "links": [
     { "details": { "external": false, "id": 0 }, "source": "w_living", "target": "e_living" },
-    { "details": { "external": false, "id": 1 }, "source": "w_living", "target": "transit" },
+    { "details": { "external": false, "id": 0 }, "source": "w_living", "target": "transit" },
     { "details": { "external": false, "id": 1 }, "source": "e_living", "target": "entry" },
     { "details": { "external": false, "id": 0 }, "source": "e_living", "target": "transit" },
     { "details": { "external": false, "id": 1 }, "source": "e_living", "target": "den" },

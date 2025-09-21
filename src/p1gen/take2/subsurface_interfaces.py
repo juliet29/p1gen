@@ -187,20 +187,4 @@ class EdgesList(BaseModel):
         new_map = update_map(self.windows_map, "WINDOW")
         return new_map
 
-    # def get_updated_maps(self, design_details: DesignDetails):
-    #     max_window_key = max(list(self.windows_map.keys()))
-    #     updated_door_map = {k + max_window_key: v for k, v in self.doors_map.items()}
 
-    #     unique_keys = list(updated_door_map.keys()) + list(self.windows_map.keys())
-
-    #     assert len(set(unique_keys)) == len(unique_keys)
-    #     updated_map = {**self.windows_map, **updated_door_map}
-
-    #     map_to_return = {}
-    #     for k, list_of_edges in updated_map.items():
-    #         map_to_return[k] = []
-    #         for edge in list_of_edges:
-    #             edge_id = self.true_subsurfaces_dict.inverse[edge]
-    #             map_to_return[k].append(edge_id)
-
-    #     return map_to_return
