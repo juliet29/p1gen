@@ -20,13 +20,15 @@ class DFC:
 class Labels:
     NET_HEAT_EXCHANGE = "Net Heat Exchange Rate [W]"
     MIXVENT_VOLUME = "Volume [m3]"  #  averaged over # TODO time step transfer?
+    SITE_TEMP = "Site Temp [ºC]"
+    DEVIATION_FROM_SITE_TEMP = "Deviation from Site Temp [ºC]"
 
 
 class QOI:
     # site
     WIND_SPEED = "Site Wind Speed"
     WIND_DIRECTION = "Site Wind Direction"
-    SITE_TEMP = "Site Outdoor Air Drybulb Temperature,"
+    SITE_TEMP = "Site Outdoor Air Drybulb Temperature"
 
     # zone level
     TEMP = "Zone Mean Air Temperature"
@@ -52,4 +54,6 @@ class CalcQOI:
     MIX_NET_HEAT_RATE = "AFN Zone Mixing Net Heat Exchange Rate"  # MINE!
     VENT_NET_HEAT_RATE = "AFN Zone Ventilation Net Heat Exchange Rate"
     NET_FLOW = "AFN Linkage Net Volume Flow Rate"
+    MEDIAN_SITE_TEMP = "Median Site Temperature"
+    ZONE_DEV_FROM_SITE_TEMP = "Zone Deviation from Site Temperature"
 
