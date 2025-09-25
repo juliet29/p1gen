@@ -28,6 +28,7 @@ dependencies = [
     "vl-convert-python>=1.8.0",
     "loguru>=0.7.3",
     "replan2eplus",
+    "marimo>=0.16.2",
 ]
 
 [tool.hatch.metadata]

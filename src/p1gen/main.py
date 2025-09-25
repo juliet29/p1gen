@@ -1,39 +1,26 @@
-from pathlib import Path
-from p1gen.take2.interfaces import Plan
-from p1gen.take2.subsurface_interfaces import EdgesList, DesignDetails
-from p1gen.paths import PlanPaths, THROWAWAY_PATH, path_to_test_plan
 from pydantic import ValidationError
-from replan2eplus.subsurfaces.interfaces import SubsurfaceInputs
-from replan2eplus.ezcase.main import EZCase
+from replan2eplus.examples.defaults import PATH_TO_IDD
 from replan2eplus.examples.mat_and_const import SAMPLE_CONSTRUCTION_SET
+from replan2eplus.ezcase.main import EZCase
+from replan2eplus.idfobjects.variables import default_variables
+from replan2eplus.subsurfaces.interfaces import SubsurfaceInputs
 from replan2eplus.visuals.base_plot import BasePlot
 
-from replan2eplus.examples.defaults import PATH_TO_IDD
-
-
-from rich import print
-
-# TODO make these paths actually static.. not based on the .git only.. handling paths in packages..
-STATIC_PATH = Path(
-    "/Users/julietnwagwuume-ezeoke/_UILCode/gqe-phd/fpopt/replan2eplus/static/_01_inputs"
+from p1gen.interfaces.interfaces import Plan
+from p1gen.interfaces.subsurface_interfaces import DesignDetails, EdgesList
+from p1gen.paths import (
+    PATH_TO_MAT_AND_CONST_IDF,
+    PATH_TO_MINIMAL_IDF,
+    PATH_TO_WEATHER_FILE,
+    PATH_TO_WINDOW_CONST_IDF,
+    THROWAWAY_PATH,
+    PlanPaths,
+    material_idfs,
+    path_to_test_plan,
 )
 
+# TODO make these paths actually static.. not based on the .git only.. handling paths in packages..
 
-PATH_TO_MINIMAL_IDF = STATIC_PATH / "base/01example/Minimal_AP.idf"
-
-PATH_TO_WEATHER_FILE = STATIC_PATH / "weather/PALO_ALTO/CA_PALO-ALTO-AP_724937_23.EPW"
-
-PATH_TO_MAT_AND_CONST_IDF = STATIC_PATH / "constructions/ASHRAE_2005_HOF_Materials.idf"
-PATH_TO_WINDOW_CONST_IDF = STATIC_PATH / "constructions/WindowConstructs.idf"
-
-PATH_TO_WINDOW_GLASS_IDF = STATIC_PATH / "constructions/WindowGlassMaterials.idf"
-PATH_TO_WINDOW_GAS_IDF = STATIC_PATH / "constructions/WindowGasMaterials.idf"
-
-material_idfs = [
-    PATH_TO_MAT_AND_CONST_IDF,
-    PATH_TO_WINDOW_GLASS_IDF,
-    PATH_TO_WINDOW_GAS_IDF,
-]
 
 
 def read_plan(path_to_plan: PlanPaths):
@@ -72,7 +59,7 @@ def prep_subsurface_inputs(path_to_plan: PlanPaths):
     return airboundary_edges, SubsurfaceInputs(subsurface_edges, details, map_)
     # TODO: need to update this replan2eplus for the IndexPair update to work..
 
-
+# TODO use replan2eplus to plot base case.. 
 def plot_base_case(case: EZCase):
     bp = (
         BasePlot(case.zones, cardinal_expansion_factor=1.4)
@@ -89,7 +76,7 @@ def plot_base_case(case: EZCase):
     bp.show()
 
 
-def prep_case(path_to_plan: PlanPaths, output_path = THROWAWAY_PATH):
+def prep_case(path_to_plan: PlanPaths, output_path=THROWAWAY_PATH):
     rooms = read_plan(path_to_plan)
     airboundary_edges, subsurface_details = prep_subsurface_inputs(path_to_plan)
 
@@ -105,7 +92,7 @@ def prep_case(path_to_plan: PlanPaths, output_path = THROWAWAY_PATH):
         SAMPLE_CONSTRUCTION_SET,
     )
     case.add_airflownetwork()
-
+    case.idf.add_output_variables(default_variables)
 
     case.save_and_run_case(output_path)
 
