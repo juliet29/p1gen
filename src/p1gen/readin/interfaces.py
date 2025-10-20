@@ -2,7 +2,7 @@
 from pydantic import BaseModel, Field
 
 # TODO these need to be brought up to init -> EZcase and the things for defining it
-from replan2eplus.zones.interfaces import Room
+from replan2eplus.ops.zones.interfaces import Room
 from replan2eplus.geometry.domain import Domain
 from replan2eplus.geometry.range import Range
 

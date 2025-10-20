@@ -45,11 +45,15 @@ THROWAWAY_PATH = BASE_PATH / "throwaway"
 
 @dataclass
 class PlanPaths:
-    path_to_case: Path
-
+    case_name: EXP_NAMES
+    case_folder: Path = SVG2PLANS
     PLAN_JSON_NAME = "plan"
     EDGES_NAME = "graph"
     DESIGN_DETAILS_NAME = "subsurfaces"
+
+    @property
+    def path_to_case(self):
+        return self.case_folder / self.case_name
 
     @property
     def plan(self):
@@ -64,7 +68,7 @@ class PlanPaths:
         return read_json(self.path_to_case, self.DESIGN_DETAILS_NAME)
 
 
-path_to_test_plan = PlanPaths(test_plan)
+path_to_test_plan = PlanPaths("case_bol_5")
 
 if __name__ == "__main__":
     print(MATERIALS_EXP)
