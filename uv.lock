@@ -1092,7 +1092,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.11.7" },
     { name = "pyprojroot", specifier = ">=0.3.0" },
     { name = "replan2eplus", directory = "../../replan2eplus" },
-    { name = "utils4plans", specifier = ">=0.1.6" },
+    { name = "utils4plans", directory = "../../utils4plans" },
     { name = "vl-convert-python", specifier = ">=1.8.0" },
 ]
 

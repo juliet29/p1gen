@@ -28,7 +28,9 @@ def create_details(window_dimension: Dimension) -> dict[str, Detail]:
 
 
 # TODO: the definition of "run simple ezcase has to match the data dict variables -> can this be assured?"
-@make_experimental_campaign(defn, exp_data, root_path=DynamicPaths.CAMPAIGN)
+@make_experimental_campaign(
+    defn, exp_data, root_path=DynamicPaths.CAMPAIGN, campaign_name="NoAFN"
+)
 def generate_experiments(
     rooms: list[Room],
     edge_groups: list[EdgeGroup],
@@ -57,7 +59,7 @@ def generate_experiments(
         ep_paths.construction_paths.material_idfs,
         construction_set,
     )
-    case.add_airflownetwork()
+    # case.add_airflownetwork()
 
     # skipping for now..
     # update_vent_schedule_for_select_afn_surfaces(

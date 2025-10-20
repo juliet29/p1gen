@@ -6,34 +6,36 @@ from dataclasses import dataclass
 from utils4plans.io import read_json
 from replan2eplus.paths import load_ep_paths
 
-# TODO -> these go in a config ..
-IDF_NAME = "out.idf"
-PATH_TO_SQL_SUBPATH = "results/eplusout.sql"
+# TODO -> these go in a config .. -> only put things you want users to be able to change into a config
+
 EXP_NAMES = Literal["case_bol_5", "case_red_b1", "case_amb_b1"]
+CampaignNameOptions = Literal["20251019_", "20251020_NoAFN"]
 
 
 BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))
 static_paths = StaticPaths("", BASE_PATH)  # TODO can extend static paths if like..
+ep_paths = load_ep_paths()
+
+
+class Constants:
+    IDF_NAME = "out.idf"
+    RESULTS_DIR = "results"
+    PATH_TO_SQL = f"{RESULTS_DIR}/eplusout.sql"
 
 
 class DynamicPaths:
     MATERIALS_EXP = static_paths.models / "material_exp"
-    test_case = (
-        MATERIALS_EXP / "Medium_case_bol_5"
-    )  
+    test_case = MATERIALS_EXP / "Medium_case_bol_5"
 
     SVG2PLANS = static_paths.plans / "svg2plan_outputs_p1gen"
     test_plan = SVG2PLANS / "case_bol_5"
     REPLAN2EPLUS_TESTS = static_paths.models / "replan_test"
     CAMPAIGN = static_paths.models / "campaigns"
-
+    THROWAWAY_PATH = BASE_PATH / "throwaway"
 
 
 def get_result_path(exp: EXP_NAMES):
     return DynamicPaths.REPLAN2EPLUS_TESTS / exp
-
-
-THROWAWAY_PATH = BASE_PATH / "throwaway"
 
 
 @dataclass
@@ -61,7 +63,6 @@ class PlanPaths:
         return read_json(self.path_to_case, self.DESIGN_DETAILS_NAME)
 
 
-ep_paths = load_ep_paths()
 path_to_test_plan = PlanPaths("case_bol_5")
 
 

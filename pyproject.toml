@@ -8,7 +8,6 @@ authors = [
 ]
 
 
-
 requires-python = ">=3.13"
 
 
@@ -24,11 +23,11 @@ dependencies = [
     "pyarrow>=21.0.0",
     "pydantic>=2.11.7",
     "pyprojroot>=0.3.0",
-    "utils4plans>=0.1.6",
     "vl-convert-python>=1.8.0",
     "loguru>=0.7.3",
     "replan2eplus",
     "marimo>=0.16.2",
+    "utils4plans",
 ]
 
 [tool.hatch.metadata]
@@ -43,3 +42,4 @@ build-backend = "uv_build"
 
 [tool.uv.sources]
 replan2eplus = { path = "../../replan2eplus" }
+utils4plans = { path = "../../utils4plans" }
