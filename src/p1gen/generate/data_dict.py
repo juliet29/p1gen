@@ -37,6 +37,14 @@ def generate_edge_groups() -> dict[str, list[EdgeGroup]]:
     return {v: generate_edge_groups_for_plan(k) for k, v in EXP_NAME_MAP.items()}
 
 
+def generate_airboundary_edges():
+    def get_ab_edges_for_plan(name):
+        edge_list = read_edges(PlanPaths(name))
+        return edge_list.airboundary_edges
+
+    return {v: get_ab_edges_for_plan(k) for k, v in EXP_NAME_MAP.items()}
+
+
 def get_details():
     return read_details(PlanPaths("case_amb_b1")).details_dict
 
@@ -59,6 +67,7 @@ exp_data = DataDict(
     case={
         "rooms": generate_rooms(),
         "edge_groups": generate_edge_groups(),
+        "airboundary_edges": generate_airboundary_edges(),
     },
     mods={
         "window_dimension": generate_window_dimensions(),

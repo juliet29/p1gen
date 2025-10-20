@@ -15,6 +15,7 @@ from replan2eplus.ops.zones.interfaces import Room
 from p1gen.generate.data_dict import exp_data, get_details
 from p1gen.generate.defn_dict import defn
 from p1gen.paths import ep_paths, DynamicPaths
+from replan2eplus.ezobjects.subsurface import Edge as ReplanEdge
 
 
 def create_details(window_dimension: Dimension) -> dict[str, Detail]:
@@ -34,6 +35,7 @@ def create_details(window_dimension: Dimension) -> dict[str, Detail]:
 def generate_experiments(
     rooms: list[Room],
     edge_groups: list[EdgeGroup],
+    airboundary_edges: list[ReplanEdge],
     window_dimension: Dimension,
     construction_set: EPConstructionSet,
     # afn_subsurface_select_fx,
@@ -50,7 +52,7 @@ def generate_experiments(
     )
     case.initialize_idf()
     case.add_zones(rooms)
-    # case.add_airboundaries() # skipping for now.
+    case.add_airboundaries(airboundary_edges) # skipping for now.
 
     case.add_subsurfaces(ss_input)
 
@@ -59,12 +61,13 @@ def generate_experiments(
         ep_paths.construction_paths.material_idfs,
         construction_set,
     )
-    # case.add_airflownetwork()
+    case.add_airflownetwork()
 
     # skipping for now..
     # update_vent_schedule_for_select_afn_surfaces(
     #     case.idf, case.airflownetwork, afn_subsurface_select_fx, vent_schedule
     # )
+    case.add_output_variables()
     case.save_and_run_case(path_=out_path, RUN=False)
     print("Done creating case!")
 

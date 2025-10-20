@@ -15,12 +15,15 @@ CampaignNameOptions = Literal["20251019_", "20251020_NoAFN"]
 BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))
 static_paths = StaticPaths("", BASE_PATH)  # TODO can extend static paths if like..
 ep_paths = load_ep_paths()
+ep_paths.reset_minimal_case(static_paths.inputs / "Minimal_AP.idf")
+
 
 
 class Constants:
     IDF_NAME = "out.idf"
     RESULTS_DIR = "results"
     PATH_TO_SQL = f"{RESULTS_DIR}/eplusout.sql"
+    DEFAULT_OPTION = "Default"
 
 
 class DynamicPaths:

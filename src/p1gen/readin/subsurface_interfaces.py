@@ -67,33 +67,6 @@ class DesignDetails(BaseModel):
     def details_dict(self):
         return self.windows_dict | self.doors_dict
 
-    # @property
-    # def group_map(self):
-    #     counter = 0
-    #     group_dict: dict[int, SubsurfacePair] = {}
-    #     for item in self.WINDOWS:
-    #         group_dict[counter] = SubsurfacePair("WINDOW", item.id)
-    #         counter += 1
-
-    #     for item in self.DOORS:
-    #         group_dict[counter] = SubsurfacePair("DOOR", item.id)
-    #         counter += 1
-    #     return bidict(group_dict)
-
-    # @property
-    # def details_map(self):
-    #     def get_detail(v: SubsurfacePair):
-    #         if v.type_ == "WINDOW":
-    #             return self.windows_map[v.id].true_detail
-    #         else:
-    #             return self.doors_map[v.id].true_detail
-    #         # TODO what if is neither?
-
-    #     return {k: get_detail(v) for k, v in self.group_map.items()}
-
-    # @property
-    # def map_(self):
-    #     return {ix: i.true_detail for ix, i in enumerate(self.WINDOWS + self.DOORS)}
 
     # TODO second map with the correct details..
 

@@ -1,44 +1,41 @@
-from typing import Literal
+from replan2eplus.results.sql import (
+    create_result_for_qoi,
+    SQLiteResult,
+)
+from p1gen.analysis.qois import QOI
+from p1gen.study.interfaces import CampaignData
+from p1gen.paths import CampaignNameOptions
+from p1gen.study.assemble import assemble_comparison_data
+from typing import NamedTuple
 import polars as pl
-import altair as alt
+from rich import print
 
 
-class AltairRenderers:
-    BROWSER = "browser"
+class DataSetInputs(NamedTuple):
+    case: str
+    category: str
+    option: str
+    value: float
 
 
-def create_fake_data():
-    categories = ["window"] * 3 + ["door_vent_sched"] * 3 + ["material"] * 3
-    options = (
-        ["-30", "Default", "+30"]
-        + ["Closed", "Dynamic", "Open"]
-        + ["Light", "Medium", "Heavy"]
-    )
-    is_default = [False, True, False] + [False, False, True] + [False, True, False]
-    avg = 10
-    values = [avg - 2, avg, avg + 1] + [avg - 4, avg, avg + 5] + [avg - 6, avg, avg + 3]
-    data = {
-        "categories": categories,
-        "options": options,
-        "is_default": is_default,
-        "values": values,
-    }
-    df = pl.DataFrame(data)
-    return df
+def get_space_and_time_avg_for_qoi(sql: SQLiteResult, qoi: str):
+    qoi_res = create_result_for_qoi(sql, qoi)
+    data = qoi_res.data_arr
+    return float(data.mean())
 
 
-def plot_sensitivity(df: pl.DataFrame):
-    # TODO this is where having a schema becomes useful..
-    chart = (
-        alt.Chart(df)
-        .mark_line(point=True)
-        .encode(x=alt.X("values"), y=alt.Y("categories"), color=alt.Color("categories"))
-    )
-    chart.show()
+def create_data_set(name: CampaignNameOptions, qoi: str):
+    comparison_data = assemble_comparison_data(name)
+
+    results = [
+        DataSetInputs(**i.description, value=get_space_and_time_avg_for_qoi(i.sql, qoi))
+        for i in comparison_data
+    ]
+    return pl.DataFrame(results)
 
 
 if __name__ == "__main__":
-    alt.renderers.enable(AltairRenderers.BROWSER)
-
-    df = create_fake_data()
-    plot_sensitivity(df)
+    # c = CampaignData("20251020_NoAFN")
+    # exp = c.experiments[0]
+    # res = get_space_and_time_avg_temp(exp.sql_results)
+    res = create_data_set("20251020_NoAFN", QOI.TEMP)

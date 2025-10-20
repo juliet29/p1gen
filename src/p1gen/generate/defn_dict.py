@@ -2,7 +2,7 @@ from replan2eplus.campaigns.decorator2 import DefinitionDict, Variable, Option
 
 defn = DefinitionDict(
     case_names=["A", "B", "C"],
-    case_variables=["rooms", "edge_groups"],
+    case_variables=["rooms", "edge_groups", "airboundary_edges"],
     modifications=[
         Variable(
             name="window_dimension",
