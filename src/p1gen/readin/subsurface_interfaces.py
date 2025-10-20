@@ -55,13 +55,17 @@ class DesignDetails(BaseModel):
 
     # TODO when creating these, doors and windows should each have unique ids..
     # here doing a work around where going to reassign these.. ids..
-    # @property
-    # def windows_map(self):
-    #     return {i.id: i for i in self.WINDOWS}
+    @property
+    def windows_dict(self) -> dict[str, Detail]:
+        return {f"Window_{i.id}": i.true_detail for ix, i in enumerate(self.WINDOWS)}
 
-    # @property
-    # def doors_map(self):
-    #     return {i.id: i for i in self.DOORS}
+    @property
+    def doors_dict(self) -> dict[str, Detail]:
+        return {f"Door_{i.id}": i.true_detail for ix, i in enumerate(self.DOORS)}
+
+    @property
+    def details_dict(self):
+        return self.windows_dict | self.doors_dict
 
     # @property
     # def group_map(self):
@@ -149,7 +153,7 @@ class EdgesList(BaseModel):
 
     @property
     def external_edges(self):
-        return [i.replan_edge for i in self.true_subsurfaces if not i.details.external]
+        return [i.replan_edge for i in self.true_subsurfaces if i.details.external]
 
     def create_edge_group(
         self,

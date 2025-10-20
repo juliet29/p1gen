@@ -4,7 +4,7 @@ from replan2eplus.ezcase.main import EZCase
 from replan2eplus.idfobjects.variables import default_variables
 from replan2eplus.visuals.base.base_plot import BasePlot
 
-from p1gen.readin.read import prep_subsurface_inputs, read_plan
+from p1gen.readin.read import  read_plan
 from p1gen.paths import (
     PATH_TO_MAT_AND_CONST_IDF,
     PATH_TO_MINIMAL_IDF,
