@@ -1,6 +1,6 @@
-
 class DFC:
     """Dataframe Columns"""
+
     CASE_NAMES = "case_names"
     SPACE_NAMES = "space_names"
 
@@ -12,7 +12,7 @@ class DFC:
     DIRECTION = "direction"
     IS_EXTERIOR = "is_exterior"
 
-    # after pivoting for altair 
+    # after pivoting for altair
     VARIABLE = "variable"
     VALUE = "value"
 
@@ -21,6 +21,7 @@ class Labels:
     NET_HEAT_EXCHANGE = "Net Heat Exchange Rate [W]"
     MIXVENT_VOLUME = "Volume [m3]"  #  averaged over # TODO time step transfer?
     SITE_TEMP = "Site Temp [ºC]"
+    TEMP = "Temp [ºC]"
     DEVIATION_FROM_SITE_TEMP = "Deviation from Site Temp [ºC]"
 
 
@@ -45,7 +46,7 @@ class QOI:
     # subsurface / surface
     FLOW_12 = "AFN Linkage Node 1 to Node 2 Volume Flow Rate"
     FLOW_21 = "AFN Linkage Node 2 to Node 1 Volume Flow Rate"
-
+    VENT_AFN = "AFN Zone Ventilation Air Change Rate"
     # surface like..
     WIND_PRESSURE = ""  # TODO!
 
@@ -56,4 +57,3 @@ class CalcQOI:
     NET_FLOW = "AFN Linkage Net Volume Flow Rate"
     MEDIAN_SITE_TEMP = "Median Site Temperature"
     ZONE_DEV_FROM_SITE_TEMP = "Zone Deviation from Site Temperature"
-

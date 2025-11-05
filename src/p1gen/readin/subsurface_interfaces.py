@@ -1,16 +1,12 @@
 from pydantic import BaseModel, ConfigDict
-from replan2eplus.ezobjects.subsurface import Edge as ReplanEdge
-from replan2eplus.ops.subsurfaces.interfaces import Detail, Dimension, Location
-from bidict import bidict
-
+from replan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
+from replan2eplus.ops.subsurfaces.interfaces import Dimension, Location
+from replan2eplus.ops.subsurfaces.user_interfaces import Detail, EdgeGroup
 from typing import Literal, NamedTuple
 from collections import Counter
-from replan2eplus.ezobjects.subsurface import Edge as ReplanEdge
 from utils4plans.sets import set_difference
-from replan2eplus.ops.subsurfaces.interfaces import EdgeGroup
 
 
-# TODO maybe these inherit from something that can convert to the subsurface loc type..
 
 
 class WindowDetail(BaseModel):

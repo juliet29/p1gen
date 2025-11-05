@@ -45,4 +45,4 @@ def run_experiments(campaign_name: CampaignNameOptions):
 
 
 if __name__ == "__main__":
-    run_experiments("20251020_NoAFN")
+    run_experiments("20251020_AFN")

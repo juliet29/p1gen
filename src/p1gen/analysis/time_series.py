@@ -3,16 +3,16 @@ from replan2eplus.results.sql import (
     SQLiteResult,
 )
 from replan2eplus.ezcase.read import ExistCase
-from p1gen.qois import QOI, CalcQOI, DFC, Labels
+from p1gen.analysis.qois import QOI, CalcQOI, DFC, Labels
 import altair as alt
 
 import xarray as xr
 import polars as pl
 
-from p1gen.paths import EXP_NAMES, get_result_path, PATH_TO_IDD
+from p1gen.paths import EXP_NAMES, get_result_path, ep_paths
 from typing import Callable, get_args
 
-from p1gen.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
+from p1gen.analysis.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
 
 
 def prepare_heat_df(case: ExistCase, sql: SQLiteResult):
@@ -88,15 +88,18 @@ def plot_by_zone(df: pl.DataFrame, ytitle: str, case_name: str = ""):
 DFGeneratingFx = Callable[[ExistCase, SQLiteResult], pl.DataFrame]
 
 
-def get_sample_chart(exp: EXP_NAMES, df_generating_fx: DFGeneratingFx):
+def get_sample_chart(exp: EXP_NAMES, df_generating_fx: DFGeneratingFx, label: str):
     path = get_result_path(exp)
-    case, sql = prep_case(PATH_TO_IDD, path)
+    case, sql = prep_case(ep_paths.idd_path, path)
     df = df_generating_fx(case, sql).pipe(filter_df_rooms)
-    return plot_by_zone(df, Labels.NET_HEAT_EXCHANGE, case_name=exp)
+    return plot_by_zone(df, label, case_name=exp)
 
 
-def plot_exp_results(df_generating_fx: DFGeneratingFx = prepare_heat_df):
-    charts = [get_sample_chart(i, df_generating_fx) for i in get_args(EXP_NAMES)]
+def plot_exp_results(
+    label: str,
+    df_generating_fx: DFGeneratingFx = prepare_heat_df,
+):
+    charts = [get_sample_chart(i, df_generating_fx, label) for i in get_args(EXP_NAMES)]
     chart = (
         alt.vconcat(*charts)
         .resolve_scale(y="shared")
@@ -109,3 +112,7 @@ def plot_exp_results(df_generating_fx: DFGeneratingFx = prepare_heat_df):
         )
     )
     return chart
+
+
+if __name__ == "__main__":
+    plot_exp_results()

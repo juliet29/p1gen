@@ -3,6 +3,8 @@ import polars as pl
 from replan2eplus.ezcase.read import ExistCase
 from replan2eplus.results.sql import get_sql_results
 import xarray as xr
+class AltairRenderers:
+    BROWSER = "browser"
 
 
 def convert_xarray_to_polars(data: xr.DataArray | xr.Dataset, name=""):

@@ -1,13 +1,13 @@
-from p1gen.qois import QOI, CalcQOI, DFC, Labels
+from p1gen.analysis.qois import QOI, CalcQOI, DFC, Labels
 from replan2eplus.results.sql import (
     create_result_for_qoi,
     get_sql_results,
     SQLiteResult,
 )
 from replan2eplus.ezcase.read import ExistCase
-from p1gen.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
+from p1gen.analysis.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
 import altair as alt
-from p1gen.paths import EXP_NAMES, get_result_path, PATH_TO_IDD
+from p1gen.paths import EXP_NAMES, get_result_path, ep_paths
 from typing import get_args
 
 
@@ -54,13 +54,15 @@ def plot_deviation_cases():
     # site_chart = plot_site(prepare_site_df(sql))
     def prepare_chart(exp: EXP_NAMES):
         path = get_result_path(exp)
-        case, sql = prep_case(PATH_TO_IDD, path)
+        case, sql = prep_case(ep_paths.idd_path, path)
         diff_df = prepare_temp_dev_df(sql).pipe(filter_df_rooms)
         return plot_deviating(diff_df, case.folder_name)
 
     charts = [prepare_chart(e) for e in get_args(EXP_NAMES)]
     chart = (
-        alt.hconcat(*charts).resolve_scale(color="independent", y="shared").resolve_axis(y="shared")
+        alt.hconcat(*charts)
+        .resolve_scale(color="independent", y="shared")
+        .resolve_axis(y="shared")
     )
     # .resolve_scale(y="shared").resolve_legend(color="independent")
     return chart
