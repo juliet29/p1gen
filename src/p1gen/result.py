@@ -3,7 +3,7 @@ from p1gen.analysis.utils import AltairRenderers
 import altair as alt
 from replan2eplus.examples.plots.data_plot import plot_zones_and_connections
 from p1gen.paths import ep_paths
-from p1gen.study.interfaces import CampaignData
+from p1gen._03_execute.interfaces import CampaignData
 from p1gen.analysis.time_series import (
     plot_exp_results,
     prepare_vol_df,

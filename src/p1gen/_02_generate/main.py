@@ -14,9 +14,9 @@ from replan2eplus.ops.subsurfaces.user_interfaces import (
 from replan2eplus.ops.zones.user_interface import Room
 from replan2eplus.paths import ep_paths
 
-from p1gen.generate.data_dict import campaign_data
-from p1gen.generate.defn_dict import campaign_defn
-from p1gen.generate.utils import create_details
+from p1gen._02_generate.data_dict import campaign_data
+from p1gen._02_generate.defn_dict import campaign_defn
+from p1gen._02_generate.utils import create_details
 from p1gen.paths import DynamicPaths
 
 
@@ -61,4 +61,4 @@ def generate_experiments(
 
 
 if __name__ == "__main__":
-    generate_experiments([], [], [], "", "", "", "") # pyright: ignore[reportArgumentType]
+    generate_experiments([], [], [], "", "", "", "")  # pyright: ignore[reportArgumentType]

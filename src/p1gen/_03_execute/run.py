@@ -2,7 +2,7 @@ from replan2eplus.ezcase.ez import EZ
 from rich import print
 
 from p1gen.paths import CampaignNameOptions, Constants, ep_paths
-from p1gen.study.interfaces import CampaignData
+from p1gen._03_execute.interfaces import CampaignData
 
 
 def run_experiments(campaign_name: CampaignNameOptions):
@@ -12,7 +12,10 @@ def run_experiments(campaign_name: CampaignNameOptions):
         try:
             case = EZ(exp.path / Constants.IDF_NAME, read_existing=False)
             case.save_and_run(
-                output_path=exp.path, epw_path=ep_paths.default_weather, run=True, save=False
+                output_path=exp.path,
+                epw_path=ep_paths.default_weather,
+                run=True,
+                save=False,
             )  # TODO think this should also have a default weather
 
         except Exception as e:

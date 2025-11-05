@@ -1,12 +1,9 @@
-from dataclasses import dataclass
 from typing import NamedTuple
 from ladybug.sql import SQLiteResult
-from replan2eplus.ezcase.read import ExistCase
 from p1gen.paths import CampaignNameOptions, Constants
-from p1gen.study.interfaces import Experiment, CampaignData
+from p1gen._03_execute.interfaces import Experiment, CampaignData
 from utils4plans.lists import chain_flatten
 from rich import print
-from copy import deepcopy
 
 
 class ComparisonData(NamedTuple):
@@ -45,4 +42,4 @@ def assemble_comparison_data(
 
 
 if __name__ == "__main__":
-    print(assemble_comparison_data("20251020_NoAFN"))
+    print(assemble_comparison_data("20251105_door_sched"))

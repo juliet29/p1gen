@@ -3,9 +3,9 @@ from replan2eplus.results.sql import (
     SQLiteResult,
 )
 from p1gen.analysis.qois import QOI
-from p1gen.study.interfaces import CampaignData
+from p1gen._03_execute.interfaces import CampaignData
 from p1gen.paths import CampaignNameOptions
-from p1gen.study.assemble import assemble_comparison_data
+from p1gen._03_execute.assemble import assemble_comparison_data
 from typing import NamedTuple
 import polars as pl
 from rich import print

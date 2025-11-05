@@ -1,7 +1,7 @@
 from replan2eplus.ops.subsurfaces.interfaces import Dimension
 from replan2eplus.ops.subsurfaces.user_interfaces import Detail
 from p1gen.paths import PlanPaths
-from p1gen.readin.read import read_details
+from p1gen._01_readin.read import read_details
 
 
 def get_details():

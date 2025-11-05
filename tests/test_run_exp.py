@@ -1,6 +1,6 @@
 # from replan2eplus.ex.make import make_test_case
 from pathlib import Path
-from p1gen.generate.utils import create_details
+from p1gen._02_generate.utils import create_details
 from replan2eplus.ezcase.ez import EZ
 from replan2eplus.ops.afn.user_interface import AFNInput
 from replan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
@@ -13,7 +13,7 @@ from replan2eplus.ops.zones.user_interface import Room
 from replan2eplus.paths import ep_paths
 from rich import print
 
-from p1gen.generate.data_dict import (
+from p1gen._02_generate.data_dict import (
     campaign_data,
     generate_door_venting_schedules,
     generate_window_dimensions,

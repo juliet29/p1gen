@@ -1,8 +1,8 @@
 from pydantic import ValidationError
 
 from p1gen.paths import PlanPaths
-from p1gen.readin.interfaces import Plan
-from p1gen.readin.subsurface_interfaces import DesignDetails, EdgesList
+from p1gen._01_readin.interfaces import Plan
+from p1gen._01_readin.subsurface_interfaces import DesignDetails, EdgesList
 
 
 def read_plan(path_to_plan: PlanPaths):
