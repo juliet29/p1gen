@@ -7,9 +7,6 @@ from pathlib import Path
 from replan2eplus.results.sql import get_sql_results
 from replan2eplus.ezcase.ez import EZ
 
-METADATA = "metadata.toml"
-DEFINITION = "defn.toml"
-
 
 @dataclass
 class Experiment:
@@ -27,10 +24,10 @@ class Experiment:
 
     @property
     def metadata(self):
-        return read_toml(self.path, METADATA)
+        return read_toml(self.path, Constants.METADATA)
 
     @property
-    def case(self):
+    def case_name(self):
         return self.metadata["case"]
 
     @property
@@ -52,8 +49,9 @@ class Experiment:
         return ""
 
     @property
-    def ezcase(self):
-        return EZ(idf_path=self.path / Constants.IDF_NAME)
+    def ezcase(self) -> EZ:
+        case = EZ(idf_path=self.path / Constants.IDF_NAME)
+        return case
 
     @property
     def sql_results(self):
@@ -76,11 +74,11 @@ class CampaignData:
 
     @property
     def metadata(self):
-        return read_toml(self.path, METADATA)
+        return read_toml(self.path, Constants.METADATA)
 
     @property
     def defn(self):
-        return read_toml(self.path, DEFINITION)
+        return read_toml(self.path, Constants.DEFINITION)
 
     @property
     def experiments(self):
@@ -91,11 +89,6 @@ class CampaignData:
         return [i["name"] for i in self.defn["modifications"]]
 
 
-# @dataclass
-# class CampaignStudy:
-
-# def read_campaign_meta_data(name:CampaignNameOptions):
-#     pass
 
 if __name__ == "__main__":
     c = CampaignData("20251019_")

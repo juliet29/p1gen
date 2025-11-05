@@ -28,12 +28,14 @@ def assemble_comparison_data(
         if not exp.modifications:
             option = Constants.DEFAULT_OPTION
             return [
-                ComparisonData(exp.case, category, option, exp.sql_results)
+                ComparisonData(exp.case_name, category, option, exp.sql_results)
                 for category in campaign_data.modification_categories
             ]
 
         # baseline
-        return [ComparisonData(exp.case, exp.category, exp.option, exp.sql_results)]
+        return [
+            ComparisonData(exp.case_name, exp.category, exp.option, exp.sql_results)
+        ]
 
     campaign_data = CampaignData(campaign_name)
     results = [create_comparison_data(e) for e in campaign_data.experiments]

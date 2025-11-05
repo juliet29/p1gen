@@ -61,4 +61,4 @@ def generate_experiments(
 
 
 if __name__ == "__main__":
-    generate_experiments([], [], [], "", "", "", "")
+    generate_experiments([], [], [], "", "", "", "") # pyright: ignore[reportArgumentType]

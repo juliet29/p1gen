@@ -9,7 +9,7 @@ from replan2eplus.paths import load_ep_paths
 # TODO -> these go in a config .. -> only put things you want users to be able to change into a config
 
 EXP_NAMES = Literal["case_bol_5", "case_red_b1", "case_amb_b1"]
-CampaignNameOptions = Literal["20251019_", "20251020_NoAFN"]
+CampaignNameOptions = Literal["20251019_", "20251020_NoAFN", "20251105_door_sched"]
 
 
 BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))
@@ -18,12 +18,13 @@ ep_paths = load_ep_paths()
 ep_paths.reset_minimal_case(static_paths.inputs / "Minimal_AP.idf")
 
 
-
 class Constants:
     IDF_NAME = "out.idf"
     RESULTS_DIR = "results"
     PATH_TO_SQL = f"{RESULTS_DIR}/eplusout.sql"
     DEFAULT_OPTION = "Default"
+    METADATA = "metadata.toml"
+    DEFINITION = "defn.toml"
 
 
 class DynamicPaths:
