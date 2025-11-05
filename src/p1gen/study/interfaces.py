@@ -4,8 +4,8 @@ from utils4plans.io import read_toml
 from p1gen.paths import CampaignNameOptions, DynamicPaths, ep_paths, Constants
 from rich import print
 from pathlib import Path
-from replan2eplus.ezcase.read import ExistCase
 from replan2eplus.results.sql import get_sql_results
+from replan2eplus.ezcase.ez import EZ
 
 METADATA = "metadata.toml"
 DEFINITION = "defn.toml"
@@ -53,7 +53,7 @@ class Experiment:
 
     @property
     def ezcase(self):
-        return ExistCase(ep_paths.idd_path, self.path / Constants.IDF_NAME)
+        return EZ(idf_path=self.path / Constants.IDF_NAME)
 
     @property
     def sql_results(self):
@@ -85,7 +85,7 @@ class CampaignData:
     @property
     def experiments(self):
         return [Experiment(i) for i in self.path.iterdir() if i.is_dir()]
-    
+
     @property
     def modification_categories(self):
         return [i["name"] for i in self.defn["modifications"]]

@@ -1,12 +1,10 @@
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict
 from replan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
 from replan2eplus.ops.subsurfaces.interfaces import Dimension, Location
 from replan2eplus.ops.subsurfaces.user_interfaces import Detail, EdgeGroup
-from typing import Literal, NamedTuple
-from collections import Counter
 from utils4plans.sets import set_difference
-
-
 
 
 class WindowDetail(BaseModel):
@@ -40,17 +38,12 @@ class DoorDetail(BaseModel):
         )
 
 
-class SubsurfacePair(NamedTuple):
-    type_: Literal["DOOR", "WINDOW"]
-    id: int
 
 
 class DesignDetails(BaseModel):
     WINDOWS: list[WindowDetail]
     DOORS: list[DoorDetail]
 
-    # TODO when creating these, doors and windows should each have unique ids..
-    # here doing a work around where going to reassign these.. ids..
     @property
     def windows_dict(self) -> dict[str, Detail]:
         return {f"Window_{i.id}": i.true_detail for ix, i in enumerate(self.WINDOWS)}
@@ -64,7 +57,6 @@ class DesignDetails(BaseModel):
         return self.windows_dict | self.doors_dict
 
 
-    # TODO second map with the correct details..
 
     @property
     def door_ix_bump(self):
@@ -99,7 +91,6 @@ class EdgesList(BaseModel):
     
     """
 
-    # as air boundaries..
     @property
     def airboundary_links(self):
         return list(
@@ -131,43 +122,3 @@ class EdgesList(BaseModel):
         type_: Literal["Zone_Direction", "Zone_Zone"],
     ):
         return EdgeGroup(replan_edges, detail_name, type_)
-
-    # @property
-    # def true_subsurfaces_dict(self):
-    #     return bidict({ix: i for ix, i in enumerate(self.true_subsurfaces)})
-
-    # @property
-    # def true_subsurfaces_dict_as_edges(self):
-    #     return {ix: i.as_replan_edge for ix, i in enumerate(self.true_subsurfaces)}
-
-    # @property
-    # def windows_map(self):
-    #     return sort_and_group_objects_dict(
-    #         [i for i in self.true_subsurfaces if i.details.external],
-    #         lambda x: x.details.id,
-    #     )
-
-    #     # now have to match to the group map..
-
-    # @property
-    # def doors_map(self):
-    #     return sort_and_group_objects_dict(
-    #         [i for i in self.true_subsurfaces if not i.details.external],
-    #         lambda x: x.details.id,
-    #     )
-
-    # def make_updated_map(self, design_details: DesignDetails):
-    #     new_map: dict[int, list[int]] = {}
-
-    #     def update_map(adict: dict[int, list[Edge]], type_: Literal["DOOR", "WINDOW"]):
-    #         for k, list_of_edges in adict.items():
-    #             details_ix = design_details.group_map.inverse[SubsurfacePair(type_, k)]
-    #             edge_ids = [
-    #                 self.true_subsurfaces_dict.inverse[i] for i in list_of_edges
-    #             ]
-    #             new_map[details_ix] = edge_ids
-    #         return new_map
-
-    #     new_map = update_map(self.doors_map, "DOOR")
-    #     new_map = update_map(self.windows_map, "WINDOW")
-    #     return new_map

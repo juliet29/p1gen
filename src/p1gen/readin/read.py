@@ -1,7 +1,7 @@
-from replan2eplus.ops.subsurfaces.interfaces import SubsurfaceInputs
+from pydantic import ValidationError
+
 from p1gen.paths import PlanPaths
 from p1gen.readin.interfaces import Plan
-from pydantic import ValidationError
 from p1gen.readin.subsurface_interfaces import DesignDetails, EdgesList
 
 

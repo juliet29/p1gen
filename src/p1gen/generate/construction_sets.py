@@ -1,5 +1,8 @@
 from typing import Literal
-from replan2eplus.ezobjects.construction import EPConstructionSet, BaseConstructionSet
+from replan2eplus.ops.constructions.interfaces import (
+    EPConstructionSet,
+    BaseConstructionSet,
+)
 
 MaterialTypes = Literal["Light", "Medium", "Heavy"]
 

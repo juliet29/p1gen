@@ -1,6 +1,6 @@
 from replan2eplus.campaigns.decorator2 import DefinitionDict, Variable, Option
 
-defn = DefinitionDict(
+campaign_defn = DefinitionDict(
     case_names=["A", "B", "C"],
     case_variables=["rooms", "edge_groups", "airboundary_edges"],
     modifications=[
@@ -12,14 +12,14 @@ defn = DefinitionDict(
                 Option("+30%"),
             ],
         ),
-        # Variable(
-        #     name="door_vent_schedule",
-        #     options=[
-        #         Option("Always Closed"),
-        #         Option("Dynamic"),
-        #         Option("Always Open", IS_DEFAULT=True),
-        #     ],
-        # ),
+        Variable(
+            name="door_vent_schedule",
+            options=[
+                Option("Always Closed"),
+                Option("Dynamic"),
+                Option("Always Open", IS_DEFAULT=True),
+            ],
+        ),
         Variable(
             name="construction_set",
             options=[
