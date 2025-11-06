@@ -48,13 +48,13 @@ class Experiment:
             return list(self.modifications.values())[0]
         return ""
 
-    @property
-    def ezcase(self) -> EZ:
-        case = EZ(idf_path=self.path / Constants.IDF_NAME)
-        return case
+    # @property
+    # def ezcase(self) -> EZ:
+    #     case = EZ(idf_path=self.path / Constants.IDF_NAME)
+    #     return case
 
-    @property
-    def sql_results(self):
+    # @property
+    def get_sql_results(self):
         try:
             return get_sql_results(self.path)
         except AssertionError:
@@ -87,7 +87,6 @@ class CampaignData:
     @property
     def modification_categories(self):
         return [i["name"] for i in self.defn["modifications"]]
-
 
 
 if __name__ == "__main__":

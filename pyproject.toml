@@ -28,6 +28,7 @@ dependencies = [
     "replan2eplus",
     "marimo>=0.16.2",
     "utils4plans",
+    "watchdog>=6.0.0",
 ]
 
 [tool.hatch.metadata]

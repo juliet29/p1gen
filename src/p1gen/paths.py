@@ -23,6 +23,7 @@ class Constants:
     RESULTS_DIR = "results"
     PATH_TO_SQL = f"{RESULTS_DIR}/eplusout.sql"
     DEFAULT_OPTION = "Default"
+    DEFAULT_CATEGORY = "Default"
     METADATA = "metadata.toml"
     DEFINITION = "defn.toml"
 
