@@ -1,16 +1,13 @@
-from p1gen.analysis.deviation import plot_deviation_cases
-from p1gen.analysis.utils import AltairRenderers
+from p1gen.plot_utils.utils import AltairRenderers
 import altair as alt
-from replan2eplus.examples.plots.data_plot import plot_zones_and_connections
+from replan2eplus.ex.make import make_data_plot
 from p1gen.paths import ep_paths
 from p1gen._03_execute.interfaces import CampaignData
 from p1gen.analysis.time_series import (
     plot_exp_results,
-    prepare_vol_df,
     prepare_temp_df,
-    prepare_heat_df,
 )
-from p1gen.analysis.qois import Labels
+from p1gen.plot_utils.labels import Labels
 
 
 def plot_geoms():

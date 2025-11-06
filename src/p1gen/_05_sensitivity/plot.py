@@ -3,8 +3,8 @@ import polars as pl
 import altair as alt
 from p1gen.sensitivity.data import create_data_set
 from p1gen.paths import CampaignNameOptions
-from p1gen.analysis.qois import QOI
-from p1gen.analysis.utils import AltairRenderers
+from p1gen.plot_utils.qois import QOI
+from p1gen.plot_utils.utils import AltairRenderers
 
 
 

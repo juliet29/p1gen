@@ -1,7 +1,4 @@
-from pathlib import Path
 import polars as pl
-from replan2eplus.ezcase.read import ExistCase
-from replan2eplus.results.sql import get_sql_results
 import xarray as xr
 class AltairRenderers:
     BROWSER = "browser"
@@ -26,10 +23,10 @@ def filter_df_rooms(df: pl.DataFrame):
     )
 
 
-def prep_case(
-    path_to_idd: Path,
-    path_to_case: Path,
-):
-    case = ExistCase(path_to_idd, path_to_case / "out.idf")
-    sql_results = get_sql_results(path_to_case)
-    return case, sql_results
+# def prep_case(
+#     path_to_idd: Path,
+#     path_to_case: Path,
+# ):
+#     case = ExistCase(path_to_idd, path_to_case / "out.idf")
+#     sql_results = get_sql_results(path_to_case)
+#     return case, sql_results

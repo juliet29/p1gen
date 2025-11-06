@@ -1,18 +1,18 @@
-from replan2eplus.results.sql import (
-    create_result_for_qoi,
-    SQLiteResult,
-)
-from replan2eplus.ezcase.read import ExistCase
-from p1gen.analysis.qois import QOI, CalcQOI, DFC, Labels
-import altair as alt
-
-import xarray as xr
-import polars as pl
-
-from p1gen.paths import EXP_NAMES, get_result_path, ep_paths
 from typing import Callable, get_args
 
-from p1gen.analysis.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
+import altair as alt
+import polars as pl
+import xarray as xr
+from replan2eplus.ezcase.ez import EZ
+from replan2eplus.results.sql import (
+    SQLiteResult,
+    create_result_for_qoi,
+)
+
+from p1gen.paths import EXP_NAMES, ep_paths, get_result_path
+from p1gen.plot_utils.labels import DFC, CalcQOI
+from p1gen.plot_utils.qois import QOI
+from p1gen.plot_utils.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
 
 
 def prepare_heat_df(case: ExistCase, sql: SQLiteResult):

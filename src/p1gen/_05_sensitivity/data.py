@@ -2,7 +2,7 @@ from replan2eplus.results.sql import (
     create_result_for_qoi,
     SQLiteResult,
 )
-from p1gen.analysis.qois import QOI
+from p1gen.plot_utils.qois import QOI
 from p1gen._03_execute.interfaces import CampaignData
 from p1gen.paths import CampaignNameOptions
 from p1gen._03_execute.assemble import assemble_comparison_data

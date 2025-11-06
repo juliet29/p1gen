@@ -1,14 +1,16 @@
-from p1gen.analysis.qois import QOI, CalcQOI, DFC, Labels
+from p1gen.plot_utils.qois import QOI
 from replan2eplus.results.sql import (
     create_result_for_qoi,
     get_sql_results,
     SQLiteResult,
 )
 from replan2eplus.ezcase.read import ExistCase
-from p1gen.analysis.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
+from p1gen.plot_utils.utils import convert_xarray_to_polars, filter_df_rooms, prep_case
 import altair as alt
 from p1gen.paths import EXP_NAMES, get_result_path, ep_paths
 from typing import get_args
+
+from p1gen.plot_utils.labels import DFC, CalcQOI, Labels
 
 
 def prepare_site_df(sql):
