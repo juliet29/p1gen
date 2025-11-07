@@ -25,15 +25,6 @@ class ComparisonData(NamedTuple):
 class ComparisonDataList(NamedTuple):
     values: list[ComparisonData]
 
-    # @property
-    # def default_experiments(self):
-    #     return list(
-    #         filter(
-    #             lambda x: x.option == Constants.DEFAULT_OPTION
-    #             and x.category == "window_dimension",
-    #             self.values,
-    #         )  # TODO this is a short term solution, in reality should get the unique!, think more about how creating the comparion data -> ACTUALLY, it kind of makes sense for the sensitivity analysis -> but do we really want 9 cases when there are only three? or maybe just need separeate function to select the defaults
-    #     )
 
 
 def assemble_default_data(campaign_name: CampaignNameOptions):
