@@ -1,5 +1,6 @@
-from p1gen._03_execute import zone_size
-from p1gen._03_execute.assemble import assemble_default_data
+from p1gen._03_execute.interfaces import Experiment
+from p1gen._03_execute.zone_size import get_afn_zone_names
+from p1gen._03_execute.assemble import ComparisonData, assemble_default_data
 from typing import NamedTuple
 import xarray as xr
 from replan2eplus.results.sql import get_qoi
@@ -105,37 +106,47 @@ def get_data_for_temperature(
     site_temp = get_qoi(
         "Site Outdoor Air Drybulb Temperature", experiments[0].path
     ).data_arr.squeeze()
-    temp_data = [
-        NamedData(
-            i.case_name,
-            get_qoi("Zone Mean Air Temperature", i.path).data_arr.mean(
-                dim="space_names"
-            )
-            - site_temp,
-        )
-        for i in experiments
-    ]  # TODO write a check for this.. pos value should mean zone is wamer than outside..
-
-    exp = experiments[0]
-    temp_data2 = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
-    zone_sizes = zone_size.get_zone_areas(exp.path)
-
-    temp_ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
-
-    zone_size_arr = xr.DataArray(
-        data=[i.value for i in zone_sizes.percents],
-        coords={"space_names": [i.name.upper() for i in zone_sizes.values]},
-    )
-
-    weighted_temp_ds = zone_size_arr * temp_ds
-
-    return temp_ds, temp_data2, zone_size_arr
 
 
-def plot_pressure_dif():
-    pass
+
+    def make_data_array(exp: ComparisonData):
+        temp_data =get_qoi("Zone Mean Air Temperature", exp.path).data_arr 
+        print(temp_data.shape)
+        afn_zone_names = get_afn_zone_names(exp.path)
+        afn_filter = temp_data.space_names.isin(afn_zone_names)
+        afn_data = temp_data.sel(space_names=afn_filter).mean(dim="space_names")
+        print(temp_data.shape)
+        return NamedData(exp.case_name, afn_data - site_temp)
+
+    
+    temp_data = [make_data_array(i) for i in experiments]
+    # temp_data = [
+    #     NamedData(
+    #         i.case_name,
+    #         get_qoi("Zone Mean Air Temperature", i.path).data_arr.mean(
+    #             dim="space_names"
+    #         )
+    #         - site_temp,
+    #     )
+    #     for i in experiments
+    # ]  # TODO write a check for this.. pos value should mean zone is wamer than outsde..
+    
+    tds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
+
+    morning_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(0, 6))))
+    night_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(28, 23))))
+
+    full_night_ds = xr.concat([morning_ds, night_ds], dim="datetimes")
+
+    day_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(6, 18))))
+    return full_night_ds, day_ds
+
+
+experiments = assemble_default_data("20251105_door_sched")
+exp = experiments[0]
+temp_data2 = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
 
 
 if __name__ == "__main__":
-    tds, temp_data2, zone_sizes = get_data_for_temperature()
+    night_ds, day_ds = get_data_for_temperature()
     # print(tds[0])

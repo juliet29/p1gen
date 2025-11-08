@@ -41,6 +41,11 @@ p1gen = "p1gen:main"
 requires = ["uv_build>=0.8.3,<0.9.0"]
 build-backend = "uv_build"
 
+[dependency-groups]
+dev = [
+    "basedpyright>=1.33.0",
+]
+
 [tool.uv.sources]
 replan2eplus = { path = "../../replan2eplus" }
 utils4plans = { path = "../../utils4plans" }

@@ -37,6 +37,14 @@ def get_zone_areas(path: Path):
     return ZoneSizesList(res)
 
 
+def get_afn_zone_names(path: Path):
+    case = EZ(path / Constants.IDF_NAME)
+    afn_zones = case.objects.airflow_network.zones
+    afn_zone_names = [i.zone_name.upper() for i in afn_zones]
+    return afn_zone_names
+
+
 if __name__ == "__main__":
     exp = assemble_default_data("20251105_door_sched")[0]
-    get_zone_areas(exp.path)
+    # get_zone_areas(exp.path)
+    get_afn_zone_names(exp.path)
