@@ -1,13 +1,14 @@
-from p1gen._03_execute.interfaces import Experiment
 from p1gen._03_execute.zone_size import get_afn_zone_names
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data
 from typing import NamedTuple
 import xarray as xr
 from replan2eplus.results.sql import get_qoi
-from datetime import time, date
-from replan2eplus.ops.schedules.interfaces.constants import DAY_START_TIME, DAY_END_TIME
 from p1gen.paths import CampaignNameOptions
-from replan2eplus.ops.schedules.interfaces.utils import create_datetime
+
+class NamedData(NamedTuple):
+    case_name: str
+    data_arr: xr.DataArray
+
 
 
 def find_max_dif_external_nodes(arr_: xr.DataArray):
@@ -15,17 +16,12 @@ def find_max_dif_external_nodes(arr_: xr.DataArray):
     assert arr.space_names.size > 2
     return arr.max(dim="space_names") - arr.min(dim="space_names")
 
-
 def find_max_dif_internal_nodes(arr_: xr.DataArray):
     arr = arr_.loc[:, arr_.space_names.str.contains("block".upper())]
     # print(arr) # TODO better if uses NOT external node
     assert arr.space_names.size > 2
     return arr.max(dim="space_names") - arr.min(dim="space_names")
 
-
-class NamedData(NamedTuple):
-    case_name: str
-    data_arr: xr.DataArray
 
 
 def get_data_for_pressure(
@@ -55,19 +51,6 @@ def get_data_for_pressure(
 
 
 quantiles = [0.1, 0.25, 0.5, 0.75, 0.9]
-
-
-morning_end = time(6)
-day_end = time(18)
-
-
-def daymap(ts: list[time]):
-    return list(map(lambda x: create_datetime(x, date_=date(2025, 7, 1)), ts))
-
-
-early_morning = slice(DAY_START_TIME, morning_end)
-daytime = slice(morning_end, day_end)
-night = slice(day_end, DAY_END_TIME)
 
 
 def find_max_flow(arr: xr.DataArray):
@@ -120,16 +103,6 @@ def get_data_for_temperature(
 
     
     temp_data = [make_data_array(i) for i in experiments]
-    # temp_data = [
-    #     NamedData(
-    #         i.case_name,
-    #         get_qoi("Zone Mean Air Temperature", i.path).data_arr.mean(
-    #             dim="space_names"
-    #         )
-    #         - site_temp,
-    #     )
-    #     for i in experiments
-    # ]  # TODO write a check for this.. pos value should mean zone is wamer than outsde..
     
     tds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
 
@@ -140,6 +113,19 @@ def get_data_for_temperature(
 
     day_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(6, 18))))
     return full_night_ds, day_ds
+
+def get_data_for_ach(
+    campaign_name: CampaignNameOptions = "20251105_door_sched",
+):
+    experiments = assemble_default_data(campaign_name)
+
+    ach_data = [
+        NamedData(i.case_name, get_qoi("AFN Zone Ventilation Air Change Rate", i.path).data_arr)
+        for i in experiments]
+
+    ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in ach_data})
+    return ds
+
 
 
 experiments = assemble_default_data("20251105_door_sched")
