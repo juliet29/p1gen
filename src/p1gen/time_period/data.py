@@ -5,10 +5,10 @@ import xarray as xr
 from replan2eplus.results.sql import get_qoi
 from p1gen.paths import CampaignNameOptions
 
+
 class NamedData(NamedTuple):
     case_name: str
     data_arr: xr.DataArray
-
 
 
 def find_max_dif_external_nodes(arr_: xr.DataArray):
@@ -16,12 +16,12 @@ def find_max_dif_external_nodes(arr_: xr.DataArray):
     assert arr.space_names.size > 2
     return arr.max(dim="space_names") - arr.min(dim="space_names")
 
+
 def find_max_dif_internal_nodes(arr_: xr.DataArray):
     arr = arr_.loc[:, arr_.space_names.str.contains("block".upper())]
     # print(arr) # TODO better if uses NOT external node
     assert arr.space_names.size > 2
     return arr.max(dim="space_names") - arr.min(dim="space_names")
-
 
 
 def get_data_for_pressure(
@@ -90,20 +90,17 @@ def get_data_for_temperature(
         "Site Outdoor Air Drybulb Temperature", experiments[0].path
     ).data_arr.squeeze()
 
-
-
     def make_data_array(exp: ComparisonData):
-        temp_data =get_qoi("Zone Mean Air Temperature", exp.path).data_arr 
+        temp_data = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
         print(temp_data.shape)
         afn_zone_names = get_afn_zone_names(exp.path)
         afn_filter = temp_data.space_names.isin(afn_zone_names)
-        afn_data = temp_data.sel(space_names=afn_filter).mean(dim="space_names")
+        afn_data = temp_data.sel(space_names=afn_filter).median(dim="space_names")
         print(temp_data.shape)
         return NamedData(exp.case_name, afn_data - site_temp)
 
-    
     temp_data = [make_data_array(i) for i in experiments]
-    
+
     tds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
 
     morning_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(0, 6))))
@@ -114,18 +111,22 @@ def get_data_for_temperature(
     day_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(6, 18))))
     return full_night_ds, day_ds
 
+
 def get_data_for_ach(
     campaign_name: CampaignNameOptions = "20251105_door_sched",
 ):
     experiments = assemble_default_data(campaign_name)
 
     ach_data = [
-        NamedData(i.case_name, get_qoi("AFN Zone Ventilation Air Change Rate", i.path).data_arr)
-        for i in experiments]
+        NamedData(
+            i.case_name,
+            get_qoi("AFN Zone Ventilation Air Change Rate", i.path).data_arr,
+        )
+        for i in experiments
+    ]
 
     ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in ach_data})
     return ds
-
 
 
 experiments = assemble_default_data("20251105_door_sched")
