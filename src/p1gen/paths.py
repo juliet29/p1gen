@@ -9,7 +9,9 @@ from replan2eplus.paths import load_ep_paths
 # TODO -> these go in a config .. -> only put things you want users to be able to change into a config
 
 EXP_NAMES = Literal["case_bol_5", "case_red_b1", "case_amb_b1"]
-CampaignNameOptions = Literal["20251019_", "20251020_NoAFN", "20251105_door_sched"]
+CampaignNameOptions = Literal[
+    "20251019_", "20251020_NoAFN", "20251105_door_sched", "20251109_summer"
+]
 
 
 BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))

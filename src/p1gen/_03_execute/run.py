@@ -3,6 +3,7 @@ from rich import print
 
 from p1gen.paths import CampaignNameOptions, Constants, ep_paths
 from p1gen._03_execute.interfaces import CampaignData
+from p1gen._02_generate.main import summer_cooling_season
 
 
 def run_experiments(campaign_name: CampaignNameOptions):
@@ -15,6 +16,7 @@ def run_experiments(campaign_name: CampaignNameOptions):
                 output_path=exp.path,
                 epw_path=ep_paths.default_weather,
                 run=True,
+                analysis_period=summer_cooling_season,
                 save=False,
             )  # TODO think this should also have a default weather
 
@@ -31,4 +33,4 @@ def run_experiments(campaign_name: CampaignNameOptions):
 
 
 if __name__ == "__main__":
-    run_experiments("20251105_door_sched")
+    run_experiments("20251109_summer")
