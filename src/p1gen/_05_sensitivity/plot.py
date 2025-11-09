@@ -1,15 +1,11 @@
-from typing import Literal
 import polars as pl
 import altair as alt
-from p1gen.sensitivity.data import create_data_set
-from p1gen.paths import CampaignNameOptions
-from p1gen.plot_utils.qois import QOI
+from p1gen._05_sensitivity.data import create_data_set
 from p1gen.plot_utils.utils import AltairRenderers
+from replan2eplus.ops.output.interfaces import OutputVariables
 
 
-
-
-def plot_sensitivity(df: pl.DataFrame, qoi: str, unit: str):
+def plot_sensitivity(df: pl.DataFrame, qoi: OutputVariables, unit: str):
     case_df = df.with_columns(
         pl.when(pl.col.option == pl.lit("Default"))
         .then(True)
@@ -36,7 +32,7 @@ def plot_sensitivity(df: pl.DataFrame, qoi: str, unit: str):
     return line  # + circles
 
 
-def plot_sensitivity_dots(df: pl.DataFrame, qoi: str, unit: str):
+def plot_sensitivity_dots(df: pl.DataFrame, qoi: OutputVariables, unit: str):
     case_df = df.with_columns(
         pl.when(pl.col.option == pl.lit("Default"))
         .then(True)
@@ -66,5 +62,5 @@ def plot_sensitivity_dots(df: pl.DataFrame, qoi: str, unit: str):
 if __name__ == "__main__":
     alt.renderers.enable(AltairRenderers.BROWSER)
 
-    df = create_data_set("20251020_NoAFN", QOI.VENT_VOL)
-    plot_sensitivity_dots(df, QOI.VENT_VOL, "m3/s")
+    df = create_data_set("20251109_summer", "Zone Mean Air Temperature")
+    plot_sensitivity_dots(df, "Zone Mean Air Temperature", "m3/s")

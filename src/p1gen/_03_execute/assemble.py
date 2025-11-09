@@ -1,11 +1,9 @@
 from typing import NamedTuple
-from ladybug.sql import SQLiteResult
 from pathlib import Path
 from p1gen.paths import CampaignNameOptions, Constants
 from p1gen._03_execute.interfaces import Experiment, CampaignData
 from utils4plans.lists import chain_flatten
 from rich import print
-from replan2eplus.ezcase.ez import EZ
 
 
 class ComparisonData(NamedTuple):
@@ -23,8 +21,9 @@ class ComparisonData(NamedTuple):
 
 
 class ComparisonDataList(NamedTuple):
-    values: list[ComparisonData]
-
+    values: list[
+        ComparisonData
+    ]  # this is a bit redundant now, since we are returning values elsewhere..
 
 
 def assemble_default_data(campaign_name: CampaignNameOptions):
@@ -47,7 +46,7 @@ def assemble_default_data(campaign_name: CampaignNameOptions):
 
 def assemble_comparison_data(
     campaign_name: CampaignNameOptions,
-) -> ComparisonDataList:
+):
     def create(exp: Experiment):
         if not exp.modifications:
             option = Constants.DEFAULT_OPTION
@@ -79,7 +78,7 @@ def assemble_comparison_data(
     results = [create(e) for e in campaign_data.experiments]
     r = chain_flatten(results)
 
-    return ComparisonDataList(r)
+    return r
 
 
 if __name__ == "__main__":

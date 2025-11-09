@@ -92,11 +92,9 @@ def get_data_for_temperature(
 
     def make_data_array(exp: ComparisonData):
         temp_data = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
-        print(temp_data.shape)
         afn_zone_names = get_afn_zone_names(exp.path)
         afn_filter = temp_data.space_names.isin(afn_zone_names)
         afn_data = temp_data.sel(space_names=afn_filter).median(dim="space_names")
-        print(temp_data.shape)
         return NamedData(exp.case_name, afn_data - site_temp)
 
     temp_data = [make_data_array(i) for i in experiments]

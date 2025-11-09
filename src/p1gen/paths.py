@@ -5,6 +5,7 @@ from pathlib import Path
 from dataclasses import dataclass
 from utils4plans.io import read_json
 from replan2eplus.paths import load_ep_paths
+from replan2eplus.results.sql import get_sql_results
 
 # TODO -> these go in a config .. -> only put things you want users to be able to change into a config
 
@@ -30,6 +31,20 @@ class Constants:
     DEFINITION = "defn.toml"
 
 
+# def get_sql_path(path: Path):
+#     return path / Constants.PATH_TO_SQL
+#
+
+
+def get_sqlite_object(path: Path):
+    try:
+        return get_sql_results(path)
+    except AssertionError:
+        raise Exception(
+            f"Could not find sql results for {path.parent.name} / {path.name}"
+        )
+
+
 class DynamicPaths:
     MATERIALS_EXP = static_paths.models / "material_exp"
     test_case = MATERIALS_EXP / "Medium_case_bol_5"
@@ -39,6 +54,10 @@ class DynamicPaths:
     REPLAN2EPLUS_TESTS = static_paths.models / "replan_test"
     CAMPAIGN = static_paths.models / "campaigns"
     THROWAWAY_PATH = BASE_PATH / "throwaway"
+
+    def get_path_for_comparison_data(self, campaign: CampaignNameOptions):
+        path = static_paths.temp / campaign / "comparison_data.csv"
+        return path
 
 
 def get_result_path(exp: EXP_NAMES):
