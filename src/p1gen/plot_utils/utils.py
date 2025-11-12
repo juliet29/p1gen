@@ -1,5 +1,8 @@
 import polars as pl
+from typing import NamedTuple
 import xarray as xr
+
+
 class AltairRenderers:
     BROWSER = "browser"
 
@@ -21,6 +24,12 @@ def filter_df_rooms(df: pl.DataFrame):
             # TODO also sort rooms.. and or have a unified way of labeling..
         )
     )
+
+
+class NamedData(NamedTuple):
+    # TODO this is duplicated in time period / data.py
+    case_name: str
+    data_arr: xr.DataArray
 
 
 # def prep_case(

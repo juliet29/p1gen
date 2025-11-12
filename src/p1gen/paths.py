@@ -1,4 +1,5 @@
 from typing import Literal
+from replan2eplus.ezcase.ez import EZ
 from utils4plans.paths import StaticPaths
 import pyprojroot
 from pathlib import Path
@@ -45,6 +46,18 @@ def get_sqlite_object(path: Path):
         )
 
 
+def get_ezcase_for_path(path: Path):
+    try:
+        pname = path / Constants.IDF_NAME
+        assert pname.exists()
+    except AssertionError:
+        raise Exception(
+            f"Could not find name {Constants.IDF_NAME} at {path.parent.name} / {path.name}"
+        )
+
+    return EZ(path / Constants.IDF_NAME)
+
+
 class DynamicPaths:
     MATERIALS_EXP = static_paths.models / "material_exp"
     test_case = MATERIALS_EXP / "Medium_case_bol_5"
@@ -56,7 +69,9 @@ class DynamicPaths:
     THROWAWAY_PATH = BASE_PATH / "throwaway"
 
     def get_path_for_comparison_data(self, campaign: CampaignNameOptions):
-        path = static_paths.temp / campaign / "comparison_data.csv"
+        path = (
+            static_paths.temp / campaign / "comparison_data.csv"
+        )  # there are different units -> temp vs other, so concat this.. for now just temp..
         return path
 
 
