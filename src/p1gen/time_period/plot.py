@@ -60,4 +60,4 @@ def get_data_and_make_plots(campaign_name: CampaignNameOptions = "20251109_summe
 
 
 if __name__ == "__main__":
-    get_data_and_make_plots()
+    get_data_and_make_plots("20251112_summer_update_dv")

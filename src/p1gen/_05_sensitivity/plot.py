@@ -1,103 +1,67 @@
-import polars as pl
 import altair as alt
-from p1gen.paths import DynamicPaths, CampaignNameOptions
-from p1gen.plot_utils.utils import AltairRenderers
+import polars as pl
 from replan2eplus.ops.output.interfaces import OutputVariables
-from rich import print
+
+from p1gen.paths import CampaignNameOptions, DynamicPaths
+from p1gen.plot_utils.utils import AltairRenderers
+from p1gen._05_sensitivity.temperature_order import (
+    CATEGORY_NAMES,
+    DOOR_VENT,
+    add_order_to_temp_df,
+    ORDER,
+)
 
 
-def plot_sensitivity(df: pl.DataFrame, qoi: OutputVariables, unit: str):
-    case_df = df.with_columns(
-        pl.when(pl.col.option == pl.lit("Default"))
-        .then(True)
-        .otherwise(False)
-        .alias("IsDefault")
-    )
-    line = (
+def handle_df_filter(df: pl.DataFrame, dvent: bool = False):
+    df1 = add_order_to_temp_df(df)
+    if dvent:
+        return df1.filter(pl.col.category == DOOR_VENT)
+    return df1.filter(pl.col.category != DOOR_VENT)
+
+
+def plot_sensitivity(
+    df: pl.DataFrame, qoi: OutputVariables, unit: str, dvent: bool = False
+):
+
+    case_df = handle_df_filter(df, dvent)
+
+    chart = (
         alt.Chart(case_df)
-        .transform_calculate(
-            res=alt.expr.if_(alt.datum.IsDefault == True, "black", "white")
-        )
         .mark_line(point=alt.OverlayMarkDef(filled=True, color="res", size=100))
         .encode(
             x=alt.X("value").scale(zero=False).title(f"{qoi} [{unit}]"),
-            y=alt.Y("category"),
-            color=alt.Color("category"),
-            column=alt.Column("case"),
+            y=alt.Y(f"{CATEGORY_NAMES}:N").title(None),
+            color=alt.Color("category").legend(None),
+            shape=alt.Shape(f"{ORDER}:O").legend(None),
+            row=alt.Row("case").title(None).header(labelFontSize=15, labelAngle=0),
         )
         .resolve_axis(x="shared")
-        .properties(height=100, width=400)
+        .properties(height=50, width=400)
     )
-    line.show()
 
-    return line  # + circles
-
-
-def plot_sensitivity_dots(df: pl.DataFrame, qoi: OutputVariables, unit: str):
-    case_df = df.with_columns(
-        pl.when(pl.col.option == pl.lit("Default"))
-        .then(True)
-        .otherwise(False)
-        .alias("IsDefault")
-    )
-    line = (
-        alt.Chart(case_df)
-        .transform_calculate(
-            res=alt.expr.if_(alt.datum.IsDefault == True, "black", "white")
-        )
-        .mark_point(size=100, filled=True)
-        .encode(
-            x=alt.X("value").scale(zero=False).title(f"{qoi} [{unit}]"),
-            y=alt.Y("category"),
-            color=alt.Color("option"),
-            column=alt.Column("case"),
-        )
-        .resolve_axis(x="shared")
-        .properties(height=100, width=400)
-    )
-    line.show()
-
-    return line  # + circles
+    return chart  # + circles
 
 
-def plot_sensitivity_single(df: pl.DataFrame, qoi: OutputVariables, unit: str):
-    df_constr = df.filter(pl.col("category") == "construction_set")
-    df_window = df.filter(pl.col("category") == "window_dimension")
-    df_door = df.filter(pl.col("category") == "door_vent_schedule")
-
-    dfs = [df_constr, df_window, df_door]
-    names = [
-        "construction_set",
-        "window_dimension",
-        "door_vent_schedule",
-    ]  # TODO get this from the defn passed in to genarate the data ..
-
-    chart = alt.vconcat()
-    for df, name in zip(dfs, names):
-        row = (
-            alt.Chart(df)
-            .mark_point(size=100, filled=True)
-            .encode(
-                x=alt.X("value").scale(zero=False).title(f"{qoi} [{unit}]"),
-                y=alt.Y("category"),
-                color=alt.Color("option", legend=alt.Legend(title=name)),
-                column=alt.Column("case"),
-            )
-            .resolve_axis(x="shared")
-            .properties(height=50, width=300)
-        )
-        chart &= row
-
-    chart2 = chart.resolve_scale(color="independent").resolve_axis(x="shared")
-    chart2.show()
-    return chart2
+def plot_both(df: pl.DataFrame, qoi: OutputVariables, unit: str):
+    c1 = plot_sensitivity(df, qoi, unit)
+    c2 = plot_sensitivity(
+        df, qoi, unit, dvent=True
+    )  # .configure_axisY(labels=False, title=None)
+    chart = c1 | c2
+    chart.show()
 
 
 if __name__ == "__main__":
     alt.renderers.enable(AltairRenderers.BROWSER)
 
     # df = create_data_set("20251109_summer", "Zone Mean Air Temperature")
-    campaign_name: CampaignNameOptions = "20251109_summer"
-    df = pl.read_csv(source=DynamicPaths().get_path_for_comparison_data(campaign_name))
-    print(df)
-    plot_sensitivity_single(df, "Zone Mean Air Temperature", "C")
+    campaign_name: CampaignNameOptions = "20251112_summer_update_dv"
+    df = pl.read_csv(
+        source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
+    )
+
+    c1 = plot_both(
+        df,
+        "Zone Mean Air Temperature",
+        "C",
+    )
