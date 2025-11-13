@@ -1,5 +1,4 @@
 from p1gen._03_execute.zone_size import get_afn_zone_names
-import matplotlib.pyplot as plt
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data
 from typing import NamedTuple
 import xarray as xr
@@ -83,6 +82,19 @@ def get_data_for_flow(
     return flow_ds
 
 
+def get_data_for_temperature_simple(
+    campaign_name: CampaignNameOptions = "20251105_door_sched",
+):
+    experiments = assemble_default_data(campaign_name)
+    temp_data = [
+        NamedData(i.case_name, get_qoi("Zone Mean Air Temperature", i.path).data_arr)
+        for i in experiments
+    ]
+
+    tds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
+    return tds
+
+
 def get_data_for_temperature(
     campaign_name: CampaignNameOptions = "20251105_door_sched",
 ):
@@ -111,47 +123,48 @@ def get_data_for_temperature(
     return full_night_ds, day_ds
 
 
-def get_data_for_ach(
-    campaign_name: CampaignNameOptions = "20251105_door_sched",
-):
-    experiments = assemble_default_data(campaign_name)
-
-    ach_data = [
-        NamedData(
-            i.case_name,
-            get_qoi("AFN Zone Ventilation Air Change Rate", i.path).data_arr,
-        )
-        for i in experiments
-    ]
-
-    ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in ach_data})
-    return ach_data  # ds
-
-
-def plot_histogram_of_ach_data_arr(ds: list[NamedData]):
-    fig, axs = plt.subplots(ncols=3)
-    names = ds
-    for ix, name in enumerate(names):
-        name.data_arr.plot.hist(
-            ax=axs[ix], density=True, histtype="step", cumulative=True
-        )
-
-    plt.show()
-
-
-def plot_histogram_of_ach(ds: xr.Dataset):
-    fig, axs = plt.subplots(ncols=3)
-    names = ["A", "B", "C"]
-    for ix, name in enumerate(names):
-        ds[name].plot.hist(
-            ax=axs[ix],
-            density=True,
-            histtype="step",
-            cumulative=True,
-        )
-
-    plt.show()
-
+#
+# def get_data_for_ach(
+#     campaign_name: CampaignNameOptions = "20251105_door_sched",
+# ):
+#     experiments = assemble_default_data(campaign_name)
+#
+#     ach_data = [
+#         NamedData(
+#             i.case_name,
+#             get_qoi("AFN Zone Ventilation Air Change Rate", i.path).data_arr,
+#         )
+#         for i in experiments
+#     ]
+#
+#     ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in ach_data})
+#     return ach_data  # ds
+#
+#
+# def plot_histogram_of_ach_data_arr(ds: list[NamedData]):
+#     fig, axs = plt.subplots(ncols=3)
+#     names = ds
+#     for ix, name in enumerate(names):
+#         name.data_arr.plot.hist(
+#             ax=axs[ix], density=True, histtype="step", cumulative=True
+#         )
+#
+#     plt.show()
+#
+#
+# def plot_histogram_of_ach(ds: xr.Dataset):
+#     fig, axs = plt.subplots(ncols=3)
+#     names = ["A", "B", "C"]
+#     for ix, name in enumerate(names):
+#         ds[name].plot.hist(
+#             ax=axs[ix],
+#             density=True,
+#             histtype="step",
+#             cumulative=True,
+#         )
+#
+#     plt.show()
+#
 
 experiments = assemble_default_data("20251105_door_sched")
 exp = experiments[0]
@@ -159,7 +172,8 @@ temp_data2 = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
 
 
 if __name__ == "__main__":
-    ds = get_data_for_ach("20251112_summer_update_dv")
-    plot_histogram_of_ach_data_arr(ds)
+    pass
+    # ds = get_data_for_ach("20251112_summer_update_dv")
+    # plot_histogram_of_ach_data_arr(ds)
     # night_ds, day_ds = get_data_for_temperature()
     # print(tds[0])
