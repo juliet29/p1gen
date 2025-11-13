@@ -108,15 +108,15 @@ def create_pressue_geometry_plot(
     return dp
 
 
-def create_geometry_plots():
+def create_geometry_plots(hour: int = 12):
     comp_data = assemble_default_data("20251105_door_sched")
-    geom_cnorm = create_pressure_cnorm()
-    flow_cnorm = create_flow_cnorm()
+    geom_cnorm = create_pressure_cnorm(hour)
+    flow_cnorm = create_flow_cnorm(hour)
 
     fig, axs = plt.subplots(ncols=3, figsize=(24, 10))
     for exp, ax in zip(comp_data, axs):
         print(f"case: {exp.case_name}")
-        create_pressue_geometry_plot(exp, geom_cnorm, flow_cnorm, fig, ax)
+        create_pressue_geometry_plot(exp, geom_cnorm, flow_cnorm, fig, ax, hour)
         # ax.set_xlim(-1, 10)
         # ax.set_ylim(-1, 12)
         # ax.spines["top"].set_visible(False)

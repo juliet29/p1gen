@@ -12,7 +12,11 @@ from replan2eplus.results.sql import get_sql_results
 
 EXP_NAMES = Literal["case_bol_5", "case_red_b1", "case_amb_b1"]
 CampaignNameOptions = Literal[
-    "20251019_", "20251020_NoAFN", "20251105_door_sched", "20251109_summer"
+    "20251019_",
+    "20251020_NoAFN",
+    "20251105_door_sched",
+    "20251109_summer",
+    "20251112_summer_update_dv",
 ]
 
 
@@ -68,9 +72,11 @@ class DynamicPaths:
     CAMPAIGN = static_paths.models / "campaigns"
     THROWAWAY_PATH = BASE_PATH / "throwaway"
 
-    def get_path_for_comparison_data(self, campaign: CampaignNameOptions):
+    def get_path_for_comparison_data(
+        self, campaign: CampaignNameOptions, qoi: Literal["temperature", "ach"]
+    ):
         path = (
-            static_paths.temp / campaign / "comparison_data.csv"
+            static_paths.temp / campaign / "comparisons" / f"{qoi}.csv"
         )  # there are different units -> temp vs other, so concat this.. for now just temp..
         return path
 

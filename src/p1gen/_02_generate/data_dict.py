@@ -8,7 +8,10 @@ from replan2eplus.ops.subsurfaces.user_interfaces import EdgeGroup
 from replan2eplus.ops.zones.user_interface import Room
 from replan2eplus.ops.afn.user_interface import AFNVentingInput, AFNInput
 
-from p1gen._02_generate.construction_sets import MaterialTypes, create_constructions_sets
+from p1gen._02_generate.construction_sets import (
+    MaterialTypes,
+    create_constructions_sets,
+)
 from p1gen.paths import EXP_NAMES, PlanPaths
 from p1gen._01_readin.read import read_details, read_edges, read_plan
 

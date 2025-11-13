@@ -20,8 +20,11 @@ from p1gen._02_generate.utils import create_details
 from p1gen.paths import DynamicPaths
 from replan2eplus.ops.run_settings.user_interfaces import AnalysisPeriod
 
+# from replan2eplus.ops.run_settings.defaults import default_analysis_period
+
 
 summer_cooling_season = AnalysisPeriod("summer_cooling_season", 5, 8, 1, 1)
+analysis_period = summer_cooling_season  # alternativel, default analysis_period to be explicit, although this is the default in replan
 
 
 # TODO: the definition of "run simple ezcase has to match the data dict variables -> can this be assured?"
@@ -29,7 +32,7 @@ summer_cooling_season = AnalysisPeriod("summer_cooling_season", 5, 8, 1, 1)
     campaign_defn,
     campaign_data,
     root_path=DynamicPaths.CAMPAIGN,
-    campaign_name="summer",
+    campaign_name="summer_update_dv",
 )
 def generate_experiments(
     rooms: list[Room],
@@ -60,11 +63,11 @@ def generate_experiments(
         )
     )
 
-    case.save_and_run(run=False, analysis_period=summer_cooling_season)
+    case.save_and_run(run=False, analysis_period=analysis_period)
     print("Done creating case!")
 
 
 if __name__ == "__main__":
     generate_experiments(
-        [], [], [], "", "", "", ""
-    )  # pyright: ignore[reportArgumentType]
+        [], [], [], "", "", "", ""  # pyright: ignore[reportArgumentType]
+    )

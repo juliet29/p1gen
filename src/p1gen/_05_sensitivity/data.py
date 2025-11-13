@@ -57,7 +57,7 @@ def write_dataframe(
     df: pl.DataFrame, path: Path
 ):  # TODO: add this to utils4plans, and update other io paths to match this paradigm
     exist_path = check_folder_exists_and_return(path.parent.parent)
-    res = get_or_make_folder_path(exist_path, path.parent)
+    res = get_or_make_folder_path(exist_path, str(path.parent))
     final_path = res / path.name
     df.write_csv(final_path)
     # TODO test this!
@@ -68,10 +68,10 @@ if __name__ == "__main__":
     # exp = c.experiments[0]
     # res = get_space_and_time_avg_temp(exp.sql_results)
 
-    campaign: CampaignNameOptions = "20251109_summer"
+    campaign: CampaignNameOptions = "20251112_summer_update_dv"
 
     res = create_data_set(campaign, "Zone Mean Air Temperature")
-    wpath = DynamicPaths().get_path_for_comparison_data(campaign)
+    wpath = DynamicPaths().get_path_for_comparison_data(campaign, "temperature")
     write_dataframe(res, wpath)
     #
     # print(res)
