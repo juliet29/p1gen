@@ -1,5 +1,5 @@
 from p1gen._03_execute.assemble import assemble_default_data
-from matplotlib.colors import SymLogNorm
+from matplotlib.colors import BoundaryNorm
 import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -72,9 +72,14 @@ def plot_to_study_colormap(ds: xr.Dataset):
 
     # axis 2
     min_, max_ = arr.min().data, arr.max().data
-    norm = SymLogNorm(linthresh=3, linscale=1, vmin=min_, vmax=max_ * 2, base=2)
 
-    bar = plt.colorbar(
+    rg = np.arange(-4, -1, 0.1)
+    rg_pos = np.arange(1, 4, 0.1)
+    rg.tolist()
+    levels = [-5] + rg.tolist() + [0] + rg_pos.tolist() + [5]
+    norm = BoundaryNorm(boundaries=levels, ncolors=256)
+
+    plt.colorbar(
         cm.ScalarMappable(norm=norm, cmap=colormap),
         orientation="vertical",
         label="Total Pressure [Pa]",
