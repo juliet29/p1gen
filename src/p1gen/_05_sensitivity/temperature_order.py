@@ -1,4 +1,5 @@
 import polars as pl
+from p1gen.config import CURRENT_CAMPAIGN
 from p1gen.paths import CampaignNameOptions, DynamicPaths
 
 

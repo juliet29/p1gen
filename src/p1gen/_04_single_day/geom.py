@@ -1,4 +1,5 @@
 from pathlib import Path
+from p1gen.plot_utils.utils import filter_to_time
 import numpy as np
 from typing import NamedTuple
 
@@ -26,7 +27,7 @@ class ColorNorm(NamedTuple):
 
 def get_pressure_for_path(path: Path, hour: int = 12):
     pressure = get_qoi("AFN Node Total Pressure", path)
-    data_at_hour = pressure.select_time(hour)
+    data_at_hour = filter_to_time(pressure.data_arr, hour)
     return data_at_hour
 
 

@@ -4,6 +4,7 @@ from typing import NamedTuple
 import xarray as xr
 from replan2eplus.results.sql import get_qoi
 from p1gen.paths import CampaignNameOptions
+from p1gen.config import CURRENT_CAMPAIGN
 
 
 class NamedData(NamedTuple):

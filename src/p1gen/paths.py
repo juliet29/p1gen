@@ -26,7 +26,6 @@ CampaignNameOptions = Literal[
     "test",
 ]
 
-CURRENT_CAMPAIGN = "20251112_summer_update_dv"
 
 FigureNames = Literal["pressure_geom", "time_box", "test", "sensitivity_line"]
 

@@ -1,2 +1,3 @@
 CURRENT_CAMPAIGN = "20251112_summer_update_dv"
 DEBUG_FIGURES = True
+STUDY_DATE = (2017, 7, 1)

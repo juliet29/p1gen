@@ -4,20 +4,12 @@ import numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import xarray as xr
-from datetime import datetime
 from replan2eplus.results.sql import get_qoi
 from p1gen.paths import CampaignNameOptions
 import matplotlib.cm as cm
 from p1gen.plot_utils.utils import NamedData
-
-
-STUDY_DATE = (2017, 7, 1)
-
-
-def filter_to_time(
-    arr: xr.DataArray, date_: tuple[int, int, int] = STUDY_DATE, hour: int = 12
-):
-    return arr.sel(datetimes=datetime(*date_, hour=hour, minute=0))
+from p1gen.config import CURRENT_CAMPAIGN
+from p1gen.plot_utils.utils import filter_to_time
 
 
 def process_data_arr(arr: xr.DataArray):

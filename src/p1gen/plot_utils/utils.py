@@ -1,6 +1,14 @@
 import polars as pl
 from typing import NamedTuple
 import xarray as xr
+from p1gen.config import STUDY_DATE
+from datetime import datetime
+
+DateTuple = tuple[int, int, int]
+
+
+def filter_to_time(arr: xr.DataArray, date_: DateTuple = STUDY_DATE, hour: int = 12):
+    return arr.sel(datetimes=datetime(*date_, hour=hour, minute=0))
 
 
 class AltairRenderers:
