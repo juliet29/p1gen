@@ -28,7 +28,7 @@ from p1gen.config import WEATHER_FILE, ANALYSIS_PERIOD
     campaign_defn,
     campaign_data,
     root_path=DynamicPaths.CAMPAIGN,
-    campaign_name="palo_alto",
+    campaign_name="palo_alto24",
 )
 def generate_experiments(
     rooms: list[Room],

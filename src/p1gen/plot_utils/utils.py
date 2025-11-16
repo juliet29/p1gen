@@ -3,6 +3,7 @@ from typing import NamedTuple
 import xarray as xr
 from p1gen.config import STUDY_DATE
 from datetime import datetime
+import altair as alt
 
 DateTuple = tuple[int, int, int]
 
@@ -15,6 +16,9 @@ class NamedData(NamedTuple):
 
 class AltairRenderers:
     BROWSER = "browser"
+
+    def set_renderer(self):
+        alt.renderers.enable(self.BROWSER)
 
 
 quantiles = [0.1, 0.25, 0.5, 0.75, 0.9]

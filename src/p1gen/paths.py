@@ -25,6 +25,7 @@ CampaignNameOptions = Literal[
     "20251112_summer_update_dv",
     "test",
     "20251116_palo_alto",
+    "20251116_palo_alto24",
 ]
 
 
@@ -50,7 +51,8 @@ class DynamicPaths:
     REPLAN2EPLUS_TESTS = static_paths.models / "replan_test"
     CAMPAIGN = static_paths.models / "campaigns"
     THROWAWAY_PATH = BASE_PATH / "throwaway"
-    PALOALTO23 = static_paths.inputs / "CA_PALO-ALTO-AP_724937_23.EPW"
+    PALOALTO17 = static_paths.inputs / "pa2017" / "CA_PALO-ALTO-AP_724937_23.EPW"
+    PALOALTO24 = static_paths.inputs / "pa2024" / "CA_PALO-ALTO-AP_724937_24.EPW"
 
     def get_path_for_comparison_data(
         self, campaign: CampaignNameOptions, qoi: Literal["temperature", "ach"]

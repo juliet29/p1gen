@@ -4,7 +4,7 @@ from rich import print
 from p1gen.paths import CampaignNameOptions, Constants
 from p1gen._03_execute.interfaces import CampaignData
 
-from p1gen.config import WEATHER_FILE, ANALYSIS_PERIOD
+from p1gen.config import CURRENT_CAMPAIGN, WEATHER_FILE, ANALYSIS_PERIOD
 
 
 def run_experiments(campaign_name: CampaignNameOptions):
@@ -34,4 +34,4 @@ def run_experiments(campaign_name: CampaignNameOptions):
 
 
 if __name__ == "__main__":
-    run_experiments("20251116_palo_alto")
+    run_experiments(CURRENT_CAMPAIGN)
