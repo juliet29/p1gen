@@ -29,6 +29,7 @@ dependencies = [
     "marimo>=0.16.2",
     "utils4plans",
     "watchdog>=6.0.0",
+    "ptpython>=3.0.31",
 ]
 
 [tool.hatch.metadata]

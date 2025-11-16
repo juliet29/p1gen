@@ -10,20 +10,23 @@ from replan2eplus.results.sql import get_sql_results
 
 # TODO -> these go in a config .. -> only put things you want users to be able to change into a config
 
+BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))
+static_paths = StaticPaths("", BASE_PATH)  # TODO can extend static paths if like..
+ep_paths = load_ep_paths()
+ep_paths.reset_minimal_case(static_paths.inputs / "Minimal_AP.idf")
+
 EXP_NAMES = Literal["case_bol_5", "case_red_b1", "case_amb_b1"]
+
 CampaignNameOptions = Literal[
     "20251019_",
     "20251020_NoAFN",
     "20251105_door_sched",
     "20251109_summer",
     "20251112_summer_update_dv",
+    "test",
 ]
 
-
-BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))
-static_paths = StaticPaths("", BASE_PATH)  # TODO can extend static paths if like..
-ep_paths = load_ep_paths()
-ep_paths.reset_minimal_case(static_paths.inputs / "Minimal_AP.idf")
+FigureNames = Literal["pressure_geom", "time_box", "test"]
 
 
 class Constants:
@@ -34,32 +37,6 @@ class Constants:
     DEFAULT_CATEGORY = "Default"
     METADATA = "metadata.toml"
     DEFINITION = "defn.toml"
-
-
-# def get_sql_path(path: Path):
-#     return path / Constants.PATH_TO_SQL
-#
-
-
-def get_sqlite_object(path: Path):
-    try:
-        return get_sql_results(path)
-    except AssertionError:
-        raise Exception(
-            f"Could not find sql results for {path.parent.name} / {path.name}"
-        )
-
-
-def get_ezcase_for_path(path: Path):
-    try:
-        pname = path / Constants.IDF_NAME
-        assert pname.exists()
-    except AssertionError:
-        raise Exception(
-            f"Could not find name {Constants.IDF_NAME} at {path.parent.name} / {path.name}"
-        )
-
-    return EZ(path / Constants.IDF_NAME)
 
 
 class DynamicPaths:
@@ -79,10 +56,6 @@ class DynamicPaths:
             static_paths.temp / campaign / "comparisons" / f"{qoi}.csv"
         )  # there are different units -> temp vs other, so concat this.. for now just temp..
         return path
-
-
-def get_result_path(exp: EXP_NAMES):
-    return DynamicPaths.REPLAN2EPLUS_TESTS / exp
 
 
 @dataclass
@@ -110,25 +83,26 @@ class PlanPaths:
         return read_json(self.path_to_case, self.DESIGN_DETAILS_NAME)
 
 
-path_to_test_plan = PlanPaths("case_bol_5")
+def get_sqlite_object(path: Path):
+    try:
+        return get_sql_results(path)
+    except AssertionError:
+        raise Exception(
+            f"Could not find sql results for {path.parent.name} / {path.name}"
+        )
+
+
+def get_ezcase_for_path(path: Path):
+    try:
+        pname = path / Constants.IDF_NAME
+        assert pname.exists()
+    except AssertionError:
+        raise Exception(
+            f"Could not find name {Constants.IDF_NAME} at {path.parent.name} / {path.name}"
+        )
+
+    return EZ(path / Constants.IDF_NAME)
 
 
 if __name__ == "__main__":
     print(DynamicPaths.MATERIALS_EXP)
-
-# STATIC_PATH = Path(
-#     "/Users/julietnwagwuume-ezeoke/_UILCode/gqe-phd/fpopt/replan2eplus/static/_01_inputs"
-# )
-
-# PATH_TO_WINDOW_GAS_IDF = STATIC_PATH / "constructions/WindowGasMaterials.idf"
-# PATH_TO_WINDOW_GLASS_IDF = STATIC_PATH / "constructions/WindowGlassMaterials.idf"
-# PATH_TO_MAT_AND_CONST_IDF = STATIC_PATH / "constructions/ASHRAE_2005_HOF_Materials.idf"
-
-# material_idfs = [
-#     PATH_TO_MAT_AND_CONST_IDF,
-#     PATH_TO_WINDOW_GLASS_IDF,
-#     PATH_TO_WINDOW_GAS_IDF,
-# ]
-# PATH_TO_WINDOW_CONST_IDF = STATIC_PATH / "constructions/WindowConstructs.idf"
-# PATH_TO_WEATHER_FILE = STATIC_PATH / "weather/PALO_ALTO/CA_PALO-ALTO-AP_724937_23.EPW"
-# PATH_TO_MINIMAL_IDF = STATIC_PATH / "base/01example/Minimal_AP.idf"
