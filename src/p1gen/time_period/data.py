@@ -25,7 +25,7 @@ def find_max_dif_internal_nodes(arr_: xr.DataArray):
 
 
 def get_data_for_pressure(
-    campaign_name: CampaignNameOptions = "20251105_door_sched",
+    campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
     pressure_data = [
@@ -59,7 +59,7 @@ def find_max_flow(arr: xr.DataArray):
 
 
 def get_data_for_flow(
-    campaign_name: CampaignNameOptions = "20251105_door_sched",
+    campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
     # TODO make this more readable!
@@ -83,7 +83,7 @@ def get_data_for_flow(
 
 
 def get_data_for_temperature_simple(
-    campaign_name: CampaignNameOptions = "20251105_door_sched",
+    campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
     temp_data = [
@@ -96,7 +96,7 @@ def get_data_for_temperature_simple(
 
 
 def get_data_for_temperature(
-    campaign_name: CampaignNameOptions = "20251105_door_sched",
+    campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
     site_temp = get_qoi(
@@ -125,7 +125,7 @@ def get_data_for_temperature(
 
 #
 # def get_data_for_ach(
-#     campaign_name: CampaignNameOptions = "20251105_door_sched",
+#     campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 # ):
 #     experiments = assemble_default_data(campaign_name)
 #

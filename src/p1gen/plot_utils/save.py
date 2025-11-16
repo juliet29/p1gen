@@ -3,13 +3,16 @@ import altair as alt
 from typing import Protocol
 from p1gen.paths import CampaignNameOptions, static_paths, FigureNames
 from utils4plans.io import create_time_string, get_or_make_folder_path
+from matplotlib.figure import Figure
 
 
-AltairChart = alt.Chart | alt.HConcatChart | alt.VConcatChart | alt.FacetChart
+AltairChart = (
+    alt.Chart | alt.HConcatChart | alt.VConcatChart | alt.FacetChart | alt.ConcatChart
+)
 
 
 class ReturnsChart(Protocol):
-    def __call__(self, *args, **kwargs) -> AltairChart: ...
+    def __call__(self, *args, **kwargs) -> AltairChart | Figure: ...
 
 
 def make_figure_path(campaign_name: CampaignNameOptions, figure_name: FigureNames):
@@ -26,9 +29,15 @@ def save_figure(
     def decorator_save_figure(func: ReturnsChart):
         def wrapper(*args, **kwargs):
             chart = func(*args, **kwargs)
-            if not debug:
+            if debug:
+                chart.show()
+            else:
                 save_path = make_figure_path(campaign_name, figure_name)
-                chart.save(save_path, ppi=250)
+                if isinstance(chart, Figure):
+                    chart.set_layout_engine("constrained")
+                    chart.savefig(save_path, dpi=200)
+                else:
+                    chart.save(save_path, ppi=250)
 
             return
 

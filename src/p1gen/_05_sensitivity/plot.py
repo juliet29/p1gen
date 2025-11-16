@@ -4,12 +4,14 @@ from replan2eplus.ops.output.interfaces import OutputVariables
 
 from p1gen.paths import CampaignNameOptions, DynamicPaths
 from p1gen.plot_utils.utils import AltairRenderers
+from p1gen.plot_utils.save import save_figure
 from p1gen._05_sensitivity.temperature_order import (
     CATEGORY_NAMES,
     DOOR_VENT,
     add_order_to_temp_df,
     ORDER,
 )
+from p1gen.config import CURRENT_CAMPAIGN, DEBUG_FIGURES
 
 
 def handle_df_filter(df: pl.DataFrame, dvent: bool = False):
@@ -48,14 +50,28 @@ def plot_both(df: pl.DataFrame, qoi: OutputVariables, unit: str):
         df, qoi, unit, dvent=True
     )  # .configure_axisY(labels=False, title=None)
     chart = c1 | c2
-    chart.show()
+    return chart
+
+
+@save_figure(CURRENT_CAMPAIGN, "sensitivity_line", DEBUG_FIGURES)
+def make_sensitivity_plot(campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN):
+    df = pl.read_csv(
+        source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
+    )
+
+    chart = plot_both(
+        df,
+        "Zone Mean Air Temperature",
+        "C",
+    )
+    return chart
 
 
 if __name__ == "__main__":
     alt.renderers.enable(AltairRenderers.BROWSER)
 
     # df = create_data_set("20251109_summer", "Zone Mean Air Temperature")
-    campaign_name: CampaignNameOptions = "20251112_summer_update_dv"
+    campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN
     df = pl.read_csv(
         source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
     )

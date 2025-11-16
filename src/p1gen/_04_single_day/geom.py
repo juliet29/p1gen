@@ -13,8 +13,10 @@ from replan2eplus.visuals.data.many_data_plot import DataPlot
 import xarray as xr
 
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data
-from p1gen.paths import get_ezcase_for_path
+from p1gen.paths import get_ezcase_for_path, CampaignNameOptions
+from p1gen.config import CURRENT_CAMPAIGN, DEBUG_FIGURES
 from p1gen.plot_utils.utils import NamedData
+from p1gen.plot_utils.save import save_figure
 
 
 class ColorNorm(NamedTuple):
@@ -108,8 +110,11 @@ def create_pressue_geometry_plot(
     return dp
 
 
-def create_geometry_plots(hour: int = 12):
-    comp_data = assemble_default_data("20251105_door_sched")
+@save_figure(CURRENT_CAMPAIGN, "pressure_geom", DEBUG_FIGURES)
+def create_geometry_plots(
+    campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN, hour: int = 12
+):
+    comp_data = assemble_default_data(campaign_name)
     geom_cnorm = create_pressure_cnorm(hour)
     flow_cnorm = create_flow_cnorm(hour)
 
@@ -140,7 +145,8 @@ def create_geometry_plots(hour: int = 12):
             shrink=0.5,
         ),
     )
-    plt.show()
+    # plt.show()
+    return fig
 
 
 if __name__ == "__main__":

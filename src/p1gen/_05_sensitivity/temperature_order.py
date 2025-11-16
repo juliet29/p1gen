@@ -2,7 +2,7 @@ import polars as pl
 from p1gen.paths import CampaignNameOptions, DynamicPaths
 
 
-campaign_name: CampaignNameOptions = "20251112_summer_update_dv"
+campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN
 df = pl.read_csv(
     source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
 )

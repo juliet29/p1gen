@@ -1,3 +1,4 @@
+from p1gen.config import DEBUG_FIGURES, CURRENT_CAMPAIGN
 from p1gen.paths import CampaignNameOptions
 from p1gen.plot_utils.save import save_figure
 from p1gen.time_period.data import (
@@ -7,13 +8,13 @@ from p1gen.time_period.data import (
 )
 from p1gen.plot_utils.utils import convert_xarray_to_polars, AltairRenderers
 import xarray as xr
-from p1gen.paths import static_paths
 import altair as alt
+
 
 alt.renderers.enable(AltairRenderers.BROWSER)
 
 
-# def create_box_plot(campaign_name: CampaignNameOptions = "20251109_summer"):
+# def create_box_plot(campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN):
 #     pressure_int, pressure_ext = get_data_for_pressure(campaign_name)
 #     print(pressure_int.mean())
 #
@@ -40,8 +41,8 @@ def make_boxplot(ds: xr.Dataset, name: str):
     return chart
 
 
-@save_figure(static_paths.figures / "time_period_box.csv", debug=True)
-def get_data_and_make_plots(campaign_name: CampaignNameOptions = "20251109_summer"):
+@save_figure(CURRENT_CAMPAIGN, "time_box", debug=DEBUG_FIGURES)
+def get_data_and_make_plots(campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN):
     internal_pressures_max_dif, ext_p = get_data_for_pressure(campaign_name)
     net_flow_plan_median = get_data_for_flow(campaign_name).median(dim="space_names")
     # ach_plan_median = get_data_for_ach(campaign_name).median(dim="space_names")

@@ -29,7 +29,7 @@ def process_data_arr(arr: xr.DataArray):
 
 
 def study_pressure_data(
-    hour: int = 12, campaign_name: CampaignNameOptions = "20251109_summer"
+    hour: int = 12, campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN
 ):
 
     comp_data = assemble_default_data(campaign_name)
