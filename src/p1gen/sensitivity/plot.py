@@ -12,6 +12,7 @@ from p1gen._05_sensitivity.temperature_order import (
     ORDER,
 )
 from p1gen.config import CURRENT_CAMPAIGN, DEBUG_FIGURES
+from p1gen._05_sensitivity.data import create_data_set
 
 
 def handle_df_filter(df: pl.DataFrame, dvent: bool = False):
@@ -70,14 +71,14 @@ def make_sensitivity_plot(campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN)
 if __name__ == "__main__":
     alt.renderers.enable(AltairRenderers.BROWSER)
 
-    # df = create_data_set("20251109_summer", "Zone Mean Air Temperature")
     campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN
-    df = pl.read_csv(
-        source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
-    )
-
-    c1 = plot_both(
-        df,
-        "Zone Mean Air Temperature",
-        "C",
-    )
+    df = create_data_set(CURRENT_CAMPAIGN, "Zone Mean Air Temperature")
+    # df = pl.read_csv(
+    #     source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
+    # )
+    #
+    # c1 = plot_both(
+    #     df,
+    #     "Zone Mean Air Temperature",
+    #     "C",
+    # )

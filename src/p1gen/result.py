@@ -1,33 +1,14 @@
-from p1gen.plot_utils.utils import AltairRenderers
-import altair as alt
-from replan2eplus.ex.make import make_data_plot
-from p1gen.paths import ep_paths
-from p1gen._03_execute.interfaces import CampaignData
-from p1gen.analysis.time_series import (
-    plot_exp_results,
-    prepare_temp_df,
-)
-from p1gen.plot_utils.labels import Labels
+from p1gen.time_period.plot import get_data_and_make_plots as save_boxplot
+from p1gen._04_single_day.geom import create_geometry_plots
+from p1gen._05_sensitivity.plot import make_sensitivity_plot
+from p1gen.config import CURRENT_CAMPAIGN
 
 
-def plot_geoms():
-    c = CampaignData("20251020_NoAFN")
-    exps = [i for i in c.experiments if not i.modifications]
-    for exp in exps:
-        print(exp.case_name)
-        res = plot_zones_and_connections(ep_paths.idd_path, exp.path, hour=12)
-        res.show()
-
-
-def main():
-    # chart = plot_deviation_cases()
-    # chart.show()
-
-    chart = plot_exp_results(Labels.TEMP, prepare_temp_df)
-    chart.show()
+def create_figures():
+    save_boxplot(CURRENT_CAMPAIGN)
+    make_sensitivity_plot(CURRENT_CAMPAIGN)
+    create_geometry_plots(CURRENT_CAMPAIGN)
 
 
 if __name__ == "__main__":
-    alt.renderers.enable(AltairRenderers.BROWSER)
-    main()
-    # plot_geoms()
+    create_figures()

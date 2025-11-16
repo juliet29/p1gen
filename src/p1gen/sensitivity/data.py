@@ -3,6 +3,7 @@ from replan2eplus.results.sql import (
 )
 from utils4plans.io import check_folder_exists_and_return, get_or_make_folder_path
 from pathlib import Path
+from p1gen.config import CURRENT_CAMPAIGN
 from p1gen.paths import CampaignNameOptions, get_sqlite_object, DynamicPaths
 from p1gen._03_execute.assemble import assemble_comparison_data
 from typing import NamedTuple
@@ -68,10 +69,11 @@ if __name__ == "__main__":
     # exp = c.experiments[0]
     # res = get_space_and_time_avg_temp(exp.sql_results)
 
-    campaign: CampaignNameOptions = "20251112_summer_update_dv"
+    campaign: CampaignNameOptions = CURRENT_CAMPAIGN
 
-    res = create_data_set(campaign, "Zone Mean Air Temperature")
     wpath = DynamicPaths().get_path_for_comparison_data(campaign, "temperature")
+    assert wpath.parent.exists(), f"Path does not exist:{wpath.parent}"
+    res = create_data_set(campaign, "Zone Mean Air Temperature")
     write_dataframe(res, wpath)
     #
     # print(res)

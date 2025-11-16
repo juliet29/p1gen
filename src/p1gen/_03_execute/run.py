@@ -1,9 +1,10 @@
 from replan2eplus.ezcase.ez import EZ
 from rich import print
 
-from p1gen.paths import CampaignNameOptions, Constants, ep_paths
+from p1gen.paths import CampaignNameOptions, Constants
 from p1gen._03_execute.interfaces import CampaignData
-from p1gen._02_generate.main import analysis_period
+
+from p1gen.config import WEATHER_FILE, ANALYSIS_PERIOD
 
 
 def run_experiments(campaign_name: CampaignNameOptions):
@@ -14,9 +15,9 @@ def run_experiments(campaign_name: CampaignNameOptions):
             case = EZ(exp.path / Constants.IDF_NAME, read_existing=False)
             case.save_and_run(
                 output_path=exp.path,
-                epw_path=ep_paths.default_weather,
+                epw_path=WEATHER_FILE,
                 run=True,
-                analysis_period=analysis_period,
+                analysis_period=ANALYSIS_PERIOD,
                 save=False,
             )  # TODO think this should also have a default weather
 
@@ -33,4 +34,4 @@ def run_experiments(campaign_name: CampaignNameOptions):
 
 
 if __name__ == "__main__":
-    run_experiments("20251112_summer_update_dv")
+    run_experiments("20251116_palo_alto")

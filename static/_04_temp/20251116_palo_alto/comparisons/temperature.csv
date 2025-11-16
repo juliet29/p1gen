@@ -1,0 +1,28 @@
+case,category,option,value
+A,construction_set,Light,16.77634210086951
+B,door_vent_schedule,Dynamic,16.596634115800864
+C,door_vent_schedule,Always Closed,16.873650777923704
+C,door_vent_schedule,Dynamic,16.66548221554038
+C,window_dimension,-30%,16.618192572472395
+A,window_dimension,Default,16.81402375049576
+A,door_vent_schedule,Default,16.81402375049576
+A,construction_set,Default,16.81402375049576
+A,door_vent_schedule,Always Closed,17.711927005621945
+C,window_dimension,+30%,16.544951141156407
+B,window_dimension,Default,16.559188966637954
+B,door_vent_schedule,Default,16.559188966637954
+B,construction_set,Default,16.559188966637954
+B,window_dimension,+30%,16.53200752952954
+C,construction_set,Heavy,16.606714910331476
+B,construction_set,Heavy,16.602667703358822
+B,door_vent_schedule,Always Closed,16.6621152907058
+A,construction_set,Heavy,16.845192728562044
+B,construction_set,Light,16.529633045200775
+A,door_vent_schedule,Dynamic,17.007865449766957
+C,construction_set,Light,16.54250031091622
+A,window_dimension,-30%,16.90028611436315
+A,window_dimension,+30%,16.767053539138
+B,window_dimension,-30%,16.60939379778296
+C,window_dimension,Default,16.567787730549377
+C,door_vent_schedule,Default,16.567787730549377
+C,construction_set,Default,16.567787730549377

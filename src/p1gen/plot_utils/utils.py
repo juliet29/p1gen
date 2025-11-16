@@ -7,12 +7,32 @@ from datetime import datetime
 DateTuple = tuple[int, int, int]
 
 
-def filter_to_time(arr: xr.DataArray, date_: DateTuple = STUDY_DATE, hour: int = 12):
-    return arr.sel(datetimes=datetime(*date_, hour=hour, minute=0))
+class NamedData(NamedTuple):
+    # TODO this is duplicated in time period / data.py
+    case_name: str
+    data_arr: xr.DataArray
 
 
 class AltairRenderers:
     BROWSER = "browser"
+
+
+quantiles = [0.1, 0.25, 0.5, 0.75, 0.9]
+
+
+def filter_to_time(arr: xr.DataArray, date_: DateTuple = STUDY_DATE, hour: int = 12):
+    return arr.sel(datetimes=datetime(*date_, hour=hour, minute=0))
+
+
+def group_dataset_by_time(ds: xr.Dataset):
+
+    morning_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(0, 6))))
+    night_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(28, 23))))
+
+    full_night_ds = xr.concat([morning_ds, night_ds], dim="datetimes")
+
+    day_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(6, 18))))
+    return full_night_ds, day_ds
 
 
 def convert_xarray_to_polars(data: xr.DataArray | xr.Dataset, name=""):
@@ -32,18 +52,3 @@ def filter_df_rooms(df: pl.DataFrame):
             # TODO also sort rooms.. and or have a unified way of labeling..
         )
     )
-
-
-class NamedData(NamedTuple):
-    # TODO this is duplicated in time period / data.py
-    case_name: str
-    data_arr: xr.DataArray
-
-
-# def prep_case(
-#     path_to_idd: Path,
-#     path_to_case: Path,
-# ):
-#     case = ExistCase(path_to_idd, path_to_case / "out.idf")
-#     sql_results = get_sql_results(path_to_case)
-#     return case, sql_results

@@ -18,13 +18,9 @@ from p1gen._02_generate.data_dict import campaign_data
 from p1gen._02_generate.defn_dict import campaign_defn
 from p1gen._02_generate.utils import create_details
 from p1gen.paths import DynamicPaths
-from replan2eplus.ops.run_settings.user_interfaces import AnalysisPeriod
+from p1gen.config import WEATHER_FILE, ANALYSIS_PERIOD
 
 # from replan2eplus.ops.run_settings.defaults import default_analysis_period
-
-
-summer_cooling_season = AnalysisPeriod("summer_cooling_season", 5, 8, 1, 1)
-analysis_period = summer_cooling_season  # alternativel, default analysis_period to be explicit, although this is the default in replan
 
 
 # TODO: the definition of "run simple ezcase has to match the data dict variables -> can this be assured?"
@@ -32,7 +28,7 @@ analysis_period = summer_cooling_season  # alternativel, default analysis_period
     campaign_defn,
     campaign_data,
     root_path=DynamicPaths.CAMPAIGN,
-    campaign_name="summer_update_dv",
+    campaign_name="palo_alto",
 )
 def generate_experiments(
     rooms: list[Room],
@@ -48,7 +44,7 @@ def generate_experiments(
 
     print("Starting to create case!")
 
-    case = EZ(epw_path=ep_paths.default_weather, output_path=out_path)
+    case = EZ(epw_path=WEATHER_FILE, output_path=out_path)
     case.add_zones(rooms)
 
     case.add_subsurfaces(ss_input, airboundary_edges=airboundary_edges)
@@ -63,7 +59,7 @@ def generate_experiments(
         )
     )
 
-    case.save_and_run(run=False, analysis_period=analysis_period)
+    case.save_and_run(run=False, analysis_period=ANALYSIS_PERIOD)
     print("Done creating case!")
 
 
