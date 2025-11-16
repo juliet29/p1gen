@@ -27,14 +27,15 @@ class ColorNorm(NamedTuple):
 
 def get_pressure_for_path(path: Path, hour: int = 12):
     pressure = get_qoi("AFN Node Total Pressure", path)
-    data_at_hour = filter_to_time(pressure.data_arr, hour)
+    data_at_hour = filter_to_time(pressure.data_arr, hour=hour)
     return data_at_hour
 
 
 def get_flow_for_path(path: Path, hour: int = 12):
-    flow_12 = get_qoi("AFN Linkage Node 1 to Node 2 Volume Flow Rate", path)
-    flow_21 = get_qoi("AFN Linkage Node 2 to Node 1 Volume Flow Rate", path)
-    net_flow = flow_12.select_time(hour) - flow_21.select_time(hour)
+    flow_12 = get_qoi("AFN Linkage Node 1 to Node 2 Volume Flow Rate", path).data_arr
+    flow_21 = get_qoi("AFN Linkage Node 2 to Node 1 Volume Flow Rate", path).data_arr
+    f12t, f21t = filter_to_time(flow_12, hour=hour), filter_to_time(flow_21, hour=hour)
+    net_flow = f12t - f21t
     return net_flow
 
 

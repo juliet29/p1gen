@@ -1,4 +1,5 @@
 import polars as pl
+import matplotlib.pyplot as plt
 import altair as alt
 from typing import Protocol
 from p1gen.paths import CampaignNameOptions, static_paths, FigureNames
@@ -30,7 +31,11 @@ def save_figure(
         def wrapper(*args, **kwargs):
             chart = func(*args, **kwargs)
             if debug:
-                chart.show()
+                if isinstance(chart, Figure):
+                    plt.show()
+                else:
+                    chart.show()
+
             else:
                 save_path = make_figure_path(campaign_name, figure_name)
                 if isinstance(chart, Figure):
@@ -44,6 +49,14 @@ def save_figure(
         return wrapper
 
     return decorator_save_figure
+
+
+@save_figure("test", "test", debug=True)
+def test_mpl_chart():
+    fig, ax = plt.subplots()  # Create a figure containing a single Axes.
+    ax.plot([1, 2, 3, 4], [1, 4, 2, 3])  # Plot some data on the Axes.
+
+    return fig
 
 
 @save_figure("test", "test", debug=False)
@@ -62,4 +75,4 @@ def test_chart():
 
 
 if __name__ == "__main__":
-    test_chart()
+    test_mpl_chart()
