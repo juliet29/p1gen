@@ -32,6 +32,8 @@ dependencies = [
     "ptpython>=3.0.31",
     "astropy>=7.1.1",
     "cmasher>=1.9.2",
+    "great-tables>=0.20.0",
+    "latextable>=1.0.1",
 ]
 
 [tool.hatch.metadata]
