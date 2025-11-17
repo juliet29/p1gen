@@ -1,7 +1,7 @@
 from p1gen._03_execute.assemble import assemble_default_data
-from matplotlib.colors import BoundaryNorm
+from astropy.visualization import ImageNormalize, ZScaleInterval
+from matplotlib.colors import Colormap
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import xarray as xr
 from replan2eplus.results.sql import get_qoi
@@ -10,6 +10,8 @@ import matplotlib.cm as cm
 from p1gen.plot_utils.utils import NamedData
 from p1gen.config import CURRENT_CAMPAIGN
 from p1gen.plot_utils.utils import filter_to_time
+from matplotlib.axes import Axes
+import matplotlib as mpl
 
 
 def process_data_arr(arr: xr.DataArray):
@@ -28,7 +30,9 @@ def study_pressure_data(
     pressures = [
         NamedData(
             i.case_name,
-            filter_to_time(get_qoi("AFN Node Total Pressure", i.path).data_arr),
+            filter_to_time(
+                get_qoi("AFN Node Total Pressure", i.path).data_arr, hour=hour
+            ),
         )
         for i in comp_data
     ]
@@ -40,48 +44,38 @@ def study_pressure_data(
     return ds, ds_mix
 
 
-# def plot_histogram_at_time(ds: xr.Dataset):
-#     fig, ax = plt.subplots()jk
-#     res = ds.to_array().plot.hist(ax=ax)
-#     plt.show()
+def create_basic(Z: np.ndarray, ax: Axes, colormap: Colormap, fig):
+    pc = ax.pcolormesh(Z, cmap=colormap)
+    fig.colorbar(pc, shrink=0.5)
+    ax.set_title("Original")
+
+
+def create_modified(arr: xr.DataArray, Z: np.ndarray, ax: Axes, colormap: Colormap):
+    min_, max_ = arr.min().data, arr.max().data
+    norm = ImageNormalize(Z, interval=ZScaleInterval())
+
+    plt.colorbar(
+        cm.ScalarMappable(norm=norm, cmap=colormap),
+        orientation="vertical",
+        label="Total Pressure [Pa]",
+        ax=ax,
+    )
+    ax.pcolormesh(Z, cmap=colormap, norm=norm)
+    ax.set_title("modification")
+    return ax
 
 
 def plot_to_study_colormap(ds: xr.Dataset):
     var_coords = {"variable": ["A", "B", "C"]}
     arr = ds.to_array().assign_coords(var_coords)
 
-    X, Y = np.meshgrid(arr.variable, arr.space_names)
     Z = arr.data
-
     colormap = mpl.colormaps["RdYlBu_r"]
+    # colormap = cmr.guppy  # plt.get_cmap("cmr.prinsenvlag")I
 
     fig, (ax1, ax2) = plt.subplots(ncols=2)
-
-    # axis 1
-    pc = ax1.pcolormesh(Z, cmap=colormap)
-    fig.colorbar(pc, shrink=0.5)
-    ax1.set_title("Original")
-
-    # axis 2
-    min_, max_ = arr.min().data, arr.max().data
-
-    rg = np.arange(-4, -1, 0.1)
-    rg_pos = np.arange(1, 4, 0.1)
-    rg.tolist()
-    levels = [-5] + rg.tolist() + [0] + rg_pos.tolist() + [5]
-    norm = BoundaryNorm(boundaries=levels, ncolors=256)
-
-    plt.colorbar(
-        cm.ScalarMappable(norm=norm, cmap=colormap),
-        orientation="vertical",
-        label="Total Pressure [Pa]",
-        ax=ax2,
-    )
-    pc = ax2.pcolormesh(Z, cmap=colormap, norm=norm)
-    ax2.set_title("modification")
-    # not straightforward to access mpl normalization functionality
-    # res = arr.plot()
-    return pc
+    ax1 = create_basic(Z, ax1, colormap, fig)
+    ax2 = create_modified(arr, Z, ax2, colormap)
 
 
 if __name__ == "__main__":

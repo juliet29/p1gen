@@ -30,6 +30,8 @@ dependencies = [
     "utils4plans",
     "watchdog>=6.0.0",
     "ptpython>=3.0.31",
+    "astropy>=7.1.1",
+    "cmasher>=1.9.2",
 ]
 
 [tool.hatch.metadata]

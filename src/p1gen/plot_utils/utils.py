@@ -28,15 +28,25 @@ def filter_to_time(arr: xr.DataArray, date_: DateTuple = STUDY_DATE, hour: int =
     return arr.sel(datetimes=datetime(*date_, hour=hour, minute=0))
 
 
-def group_dataset_by_time(ds: xr.Dataset):
+def group_dataset_by_time(ds_: xr.Dataset):
+    # based on obsevations of data set -> can put in config ..
+    DATE_START = 0
+    MORN_END = 6
+    DAY_END = 18
+    DATE_END = 23
 
-    morning_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(0, 6))))
-    night_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(28, 23))))
+    # first resample to a virtual_month?
+    ds = ds_.resample(datetimes="3h").mean()
+
+    morning_ds = ds.isel(
+        datetimes=(ds.datetimes.dt.hour.isin(range(DATE_START, MORN_END)))
+    )
+    night_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(DAY_END, DATE_END))))
 
     full_night_ds = xr.concat([morning_ds, night_ds], dim="datetimes")
 
-    day_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(6, 18))))
-    return full_night_ds, day_ds
+    day_ds = ds.isel(datetimes=(ds.datetimes.dt.hour.isin(range(MORN_END, DAY_END))))
+    return day_ds, full_night_ds
 
 
 def convert_xarray_to_polars(data: xr.DataArray | xr.Dataset, name=""):

@@ -1,12 +1,12 @@
 from pathlib import Path
+from astropy.visualization import ImageNormalize, ZScaleInterval
 from p1gen.plot_utils.utils import filter_to_time
-import numpy as np
 from typing import NamedTuple
 
 import matplotlib as mpl
 from matplotlib.axes import Axes
 import matplotlib.cm as cm
-from matplotlib.colors import Colormap, Normalize, BoundaryNorm
+from matplotlib.colors import Colormap, Normalize
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from replan2eplus.results.sql import get_qoi
@@ -39,8 +39,7 @@ def get_flow_for_path(path: Path, hour: int = 12):
     return net_flow
 
 
-def create_pressure_cnorm(hour=12):
-    comp_data = assemble_default_data("20251105_door_sched")
+def create_pressure_cnorm(comp_data: list[ComparisonData], hour=12):
     pressures = [
         NamedData(i.case_name, get_pressure_for_path(i.path, hour)) for i in comp_data
     ]
@@ -51,19 +50,15 @@ def create_pressure_cnorm(hour=12):
     arr = ds.to_array().assign_coords(var_coords)
 
     colormap = mpl.colormaps["RdYlBu_r"]
-    min_, max_ = arr.min().data, arr.max().data
 
-    rg = np.arange(-5, -1, 0.1)
-    rg_pos = np.linspace(3, 5, len(rg))
-    rg.tolist()
-    levels = rg.tolist() + [0] + rg_pos.tolist()
-    norm = BoundaryNorm(boundaries=levels, ncolors=256)
+    norm = ImageNormalize(arr.data, interval=ZScaleInterval())
 
-    return ColorNorm(colormap, norm)
+    return ColorNorm(colormap, norm)  # type: ignore
 
 
-def create_flow_cnorm(hour=12, colormap_name: str = "PuBu"):
-    comp_data = assemble_default_data("20251105_door_sched")
+def create_flow_cnorm(
+    comp_data: list[ComparisonData], hour=12, colormap_name: str = "PuBu"
+):
 
     flow_data = [
         NamedData(i.case_name, get_flow_for_path(i.path, hour=hour)) for i in comp_data
@@ -112,42 +107,37 @@ def create_pressue_geometry_plot(
     return dp
 
 
-@save_figure(CURRENT_CAMPAIGN, "pressure_geom", DEBUG_FIGURES)
+@save_figure(CURRENT_CAMPAIGN, "pressure_geom", debug=DEBUG_FIGURES)
 def create_geometry_plots(
     campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN, hour: int = 12
 ):
     comp_data = assemble_default_data(campaign_name)
-    geom_cnorm = create_pressure_cnorm(hour)
-    flow_cnorm = create_flow_cnorm(hour)
+    geom_cnorm = create_pressure_cnorm(comp_data, hour)
+    flow_cnorm = create_flow_cnorm(comp_data, hour)
 
     fig, axs = plt.subplots(ncols=3, figsize=(24, 10))
     for exp, ax in zip(comp_data, axs):
         print(f"case: {exp.case_name}")
         create_pressue_geometry_plot(exp, geom_cnorm, flow_cnorm, fig, ax, hour)
-        # ax.set_xlim(-1, 10)
-        # ax.set_ylim(-1, 12)
-        # ax.spines["top"].set_visible(False)
-        # ax.spines["right"].set_visible(False)
 
-    geom_bar = (
-        plt.colorbar(
-            cm.ScalarMappable(norm=geom_cnorm.norm, cmap=geom_cnorm.cmap),
-            orientation="horizontal",
-            label="Total Pressure [Pa]",
-            ax=axs,
-            shrink=0.5,
-        ),
+    ORIENTATION = "vertical"
+    SHRINK = 0.8
+
+    plt.colorbar(
+        cm.ScalarMappable(norm=geom_cnorm.norm, cmap=geom_cnorm.cmap),
+        orientation=ORIENTATION,
+        label="Total Pressure [Pa]",
+        ax=axs,
+        shrink=SHRINK,
     )
-    flow_bar = (
-        plt.colorbar(
-            cm.ScalarMappable(norm=flow_cnorm.norm, cmap=flow_cnorm.cmap),
-            orientation="horizontal",
-            label="Net Ventilation Flow Rate [m3/s]",
-            ax=axs,
-            shrink=0.5,
-        ),
+
+    plt.colorbar(
+        cm.ScalarMappable(norm=flow_cnorm.norm, cmap=flow_cnorm.cmap),
+        orientation=ORIENTATION,
+        label="Net Ventilation Flow Rate [m3/s]",
+        ax=axs,
+        shrink=SHRINK,
     )
-    # plt.show()
     return fig
 
 

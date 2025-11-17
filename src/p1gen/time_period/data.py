@@ -46,21 +46,18 @@ def get_data_for_flow(
     campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
-    # TODO make this more readable!
-    flow_data = [
-        NamedData(
-            i.case_name,
-            abs(
-                get_qoi(
-                    "AFN Linkage Node 1 to Node 2 Volume Flow Rate", i.path
-                ).data_arr
-                - get_qoi(
-                    "AFN Linkage Node 2 to Node 1 Volume Flow Rate", i.path
-                ).data_arr
-            ),
-        )
-        for i in experiments
-    ]
+
+    def make_data_array(exp: ComparisonData):
+        flow12 = get_qoi(
+            "AFN Linkage Node 1 to Node 2 Volume Flow Rate", exp.path
+        ).data_arr
+        flow21 = get_qoi(
+            "AFN Linkage Node 2 to Node 1 Volume Flow Rate", exp.path
+        ).data_arr
+        data = (abs(flow12 - flow21)).mean(dim="space_names")
+        return NamedData(exp.case_name, data)
+
+    flow_data = [make_data_array(i) for i in experiments]
 
     flow_ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in flow_data})
     return flow_ds
@@ -70,16 +67,21 @@ def get_data_for_temperature_simple(
     campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
-    temp_data = [
-        NamedData(i.case_name, get_qoi("Zone Mean Air Temperature", i.path).data_arr)
-        for i in experiments
-    ]
+
+    def make_data_array(exp: ComparisonData):
+        temp_data = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
+        afn_zone_names = get_afn_zone_names(exp.path)
+        afn_filter = temp_data.space_names.isin(afn_zone_names)
+        afn_data = temp_data.sel(space_names=afn_filter).mean(dim="space_names")
+        return NamedData(exp.case_name, afn_data)
+
+    temp_data = [make_data_array(i) for i in experiments]
 
     tds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
     return tds
 
 
-def get_data_for_temperature(
+def get_data_for_temperature_deviation(
     campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN,
 ):
     experiments = assemble_default_data(campaign_name)
@@ -91,20 +93,14 @@ def get_data_for_temperature(
         temp_data = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
         afn_zone_names = get_afn_zone_names(exp.path)
         afn_filter = temp_data.space_names.isin(afn_zone_names)
-        afn_data = temp_data.sel(space_names=afn_filter).median(dim="space_names")
+        afn_data = temp_data.sel(space_names=afn_filter).mean(dim="space_names")
         return NamedData(exp.case_name, afn_data - site_temp)
 
     temp_data = [make_data_array(i) for i in experiments]
 
     tds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in temp_data})
 
-    # morning_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(0, 6))))
-    # night_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(28, 23))))
-    #
-    # full_night_ds = xr.concat([morning_ds, night_ds], dim="datetimes")
-    #
-    # day_ds = tds.isel(datetimes=(tds.datetimes.dt.hour.isin(range(6, 18))))
-    return tds  # full_night_ds, day_ds
+    return tds
 
 
 def get_data_for_ach(
@@ -112,14 +108,12 @@ def get_data_for_ach(
 ):
     experiments = assemble_default_data(campaign_name)
 
-    ach_data = [
-        NamedData(
-            i.case_name,
-            get_qoi("AFN Zone Ventilation Air Change Rate", i.path).data_arr,
-        )
-        for i in experiments
-    ]
+    def make_data_array(exp: ComparisonData):
+        data = get_qoi("AFN Zone Ventilation Air Change Rate", exp.path).data_arr
+        da = data.where(data > 0, drop=True).mean(dim="space_names")
+        return NamedData(exp.case_name, da)
 
+    ach_data = [make_data_array(i) for i in experiments]
     ds = xr.Dataset(data_vars={i.case_name: i.data_arr for i in ach_data})
     return ds  # ach_data  # ds
 

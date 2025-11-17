@@ -30,7 +30,7 @@ def prep_weather_plots():
             pl.col(TEMPERATURE).mean(),
             pl.col(WIND_SPEED).mean(),
             pl.col(WIND_DIRECTION).mean(),
-        )
+        )  # TODO: line up with the analsis period
         .filter(pl.col.month.is_in(range(6, 11)))
     )
 
