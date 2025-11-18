@@ -4,7 +4,7 @@ from replan2eplus.results.sql import (
 from utils4plans.io import check_folder_exists_and_return, get_or_make_folder_path
 from pathlib import Path
 from p1gen.config import CURRENT_CAMPAIGN
-from p1gen.paths import CampaignNameOptions, get_sqlite_object, DynamicPaths
+from p1gen.paths import CampaignNameOptions, get_sqlite_object
 from p1gen._03_execute.assemble import assemble_comparison_data
 from typing import NamedTuple
 from replan2eplus.ops.output.interfaces import OutputVariables
@@ -28,6 +28,14 @@ def get_space_and_time_avg_for_qoi(path: Path, qoi: OutputVariables):
         afn_filter = data.space_names.isin(afn_zone_names)
         afn_data = data.sel(space_names=afn_filter)
         return float(afn_data.mean())
+
+    if qoi == "AFN Linkage Node 1 to Node 2 Volume Flow Rate":
+        f12 = data
+        f21 = create_result_for_qoi(
+            sql, "AFN Linkage Node 2 to Node 1 Volume Flow Rate"
+        ).data_arr
+        res = abs(f12 - f21)
+        return float(res.mean())
 
     return float(data.mean())
 
@@ -70,11 +78,14 @@ if __name__ == "__main__":
     # res = get_space_and_time_avg_temp(exp.sql_results)
 
     campaign: CampaignNameOptions = CURRENT_CAMPAIGN
+    res = create_data_set(
+        CURRENT_CAMPAIGN, "AFN Linkage Node 1 to Node 2 Volume Flow Rate"
+    )
 
-    wpath = DynamicPaths().get_path_for_comparison_data(campaign, "temperature")
-    assert wpath.parent.exists(), f"Path does not exist:{wpath.parent}"
-    res = create_data_set(campaign, "Zone Mean Air Temperature")
-    write_dataframe(res, wpath)
+    # wpath = DynamicPaths().get_path_for_comparison_data(campaign, "temperature")
+    # assert wpath.parent.exists(), f"Path does not exist:{wpath.parent}"
+    # res = create_data_set(campaign, "Zone Mean Air Temperature")
+    # write_dataframe(res, wpath)
     #
     # print(res)
     # fake_df = pl.DataFrame({"hi": [1, 2, 3]})

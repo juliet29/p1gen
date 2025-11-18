@@ -29,7 +29,18 @@ CampaignNameOptions = Literal[
 ]
 
 
-FigureNames = Literal["pressure_geom", "time_box", "test", "sensitivity_line"]
+FigureNames = Literal[
+    "pressure_geom",
+    "time_box",
+    "test",
+    "sensitivity_line",
+    "sens_temp",
+    "sens_flow",
+    "box_pressure",
+    "box_temp",
+    "box_vent",
+    "site_temp",
+]
 
 
 class Constants:

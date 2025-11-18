@@ -40,9 +40,9 @@ def save_figure(
                 save_path = make_figure_path(campaign_name, figure_name)
                 if isinstance(chart, Figure):
                     chart.set_layout_engine("constrained")
-                    chart.savefig(save_path, dpi=200)
+                    chart.savefig(save_path, dpi=300)
                 else:
-                    chart.save(save_path, ppi=250)
+                    chart.save(save_path, ppi=300)
 
             return
 

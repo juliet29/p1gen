@@ -141,3 +141,4 @@ if __name__ == "__main__":
 
     res = prep_table_mc()
     _, t1 = res
+    print(t1)

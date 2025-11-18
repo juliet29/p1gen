@@ -1,12 +1,12 @@
 import polars as pl
 from p1gen.config import CURRENT_CAMPAIGN
-from p1gen.paths import CampaignNameOptions, DynamicPaths
+from p1gen.paths import CampaignNameOptions
 
 
 campaign_name: CampaignNameOptions = CURRENT_CAMPAIGN
-df = pl.read_csv(
-    source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
-)
+# df = pl.read_csv(
+#     source=DynamicPaths().get_path_for_comparison_data(campaign_name, "temperature")
+# )
 
 CSET = "construction_set"
 DOOR_VENT = "door_vent_schedule"
