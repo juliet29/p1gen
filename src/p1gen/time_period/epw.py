@@ -1,10 +1,17 @@
 from pathlib import Path
 import polars as pl
-from p1gen.config import DEBUG_FIGURES, WEATHER_FILE, CURRENT_CAMPAIGN
+from p1gen.config import (
+    DEBUG_FIGURES,
+    WEATHER_FILE,
+    CURRENT_CAMPAIGN,
+    STUDY_DATE,
+    STUDY_HOUR,
+)
 from p1gen.time_period.epw_read import read_epw
 import altair as alt
 from p1gen.plot_utils.utils import AltairRenderers
 from p1gen.plot_utils.save import save_figure
+from datetime import datetime
 
 
 # def read_epw(path: Path = WEATHER_FILE):
@@ -21,6 +28,16 @@ units = ["[ºC]", "[m/s]", "[º]"]
 def analyze_epw(path: Path = WEATHER_FILE):
     epw = read_epw(path)
     return epw
+
+
+def conditions_at_geom_time(
+    date_: tuple[int, int, int] = STUDY_DATE, hour: int = STUDY_HOUR
+):
+    datetime_ = datetime(*date_, hour)
+    epw = analyze_epw()
+    return epw.filter(pl.col.datetime == datetime_).select(
+        ["Wind Direction", "Dry Bulb Temperature", "Wind Speed"]
+    )
 
 
 @save_figure(CURRENT_CAMPAIGN, "site_temp", DEBUG_FIGURES)
