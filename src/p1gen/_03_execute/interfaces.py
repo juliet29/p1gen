@@ -1,11 +1,9 @@
 from dataclasses import dataclass
 
 from utils4plans.io import read_toml
-from p1gen.paths import CampaignNameOptions, DynamicPaths, ep_paths, Constants
-from rich import print
+from p1gen.paths import CampaignNameOptions, DynamicPaths, Constants
 from pathlib import Path
-from replan2eplus.results.sql import get_sql_results
-from replan2eplus.ezcase.ez import EZ
+from plan2eplus.results.sql import get_sql_results
 
 
 @dataclass

@@ -1,8 +1,8 @@
 from typing import Iterable, NamedTuple
 from rich import print
-from replan2eplus.ops.subsurfaces.ezobject import Subsurface
-from replan2eplus.ops.surfaces.ezobject import Surface
-from replan2eplus.ops.constructions.idfobject import IDFConstruction
+from plan2eplus.ops.subsurfaces.ezobject import Subsurface
+from plan2eplus.ops.surfaces.ezobject import Surface
+from plan2eplus.ops.constructions.idfobject import IDFConstruction
 from geomeppy import IDF
 
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data

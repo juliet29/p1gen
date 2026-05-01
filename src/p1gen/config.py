@@ -1,4 +1,4 @@
-from replan2eplus.ops.run_settings.user_interfaces import AnalysisPeriod
+from plan2eplus.ops.run_settings.user_interfaces import AnalysisPeriod
 from p1gen.paths import CampaignNameOptions, DynamicPaths
 
 CURRENT_CAMPAIGN: CampaignNameOptions = "20251116_palo_alto24"

@@ -1,7 +1,7 @@
 from p1gen._03_execute.zone_size import get_afn_zone_names
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data
 import xarray as xr
-from replan2eplus.results.sql import get_qoi
+from plan2eplus.results.sql import get_qoi
 from p1gen.paths import CampaignNameOptions
 from p1gen.config import CURRENT_CAMPAIGN
 from p1gen.plot_utils.utils import NamedData
@@ -24,7 +24,7 @@ def get_data_for_pressure(
 ):
     experiments = assemble_default_data(campaign_name)
     pressure_data = [
-        NamedData(i.case_name, get_qoi("AFN Node Total Pressure", i.path).data_arr)
+        NamedData(i.case_name, get_qoi("AFN Node Total Pressure", i.sql_path).data_arr)
         for i in experiments
     ]
     max_dif_internal = xr.Dataset(
@@ -49,10 +49,10 @@ def get_data_for_flow(
 
     def make_data_array(exp: ComparisonData):
         flow12 = get_qoi(
-            "AFN Linkage Node 1 to Node 2 Volume Flow Rate", exp.path
+            "AFN Linkage Node 1 to Node 2 Volume Flow Rate", exp.sql_path
         ).data_arr
         flow21 = get_qoi(
-            "AFN Linkage Node 2 to Node 1 Volume Flow Rate", exp.path
+            "AFN Linkage Node 2 to Node 1 Volume Flow Rate", exp.sql_path
         ).data_arr
         data = (abs(flow12 - flow21)).mean(dim="space_names")
         return NamedData(exp.case_name, data)
@@ -69,7 +69,7 @@ def get_data_for_temperature_simple(
     experiments = assemble_default_data(campaign_name)
 
     def make_data_array(exp: ComparisonData):
-        temp_data = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
+        temp_data = get_qoi("Zone Mean Air Temperature", exp.sql_path).data_arr
         afn_zone_names = get_afn_zone_names(exp.path)
         afn_filter = temp_data.space_names.isin(afn_zone_names)
         afn_data = temp_data.sel(space_names=afn_filter).mean(dim="space_names")
@@ -86,11 +86,11 @@ def get_data_for_temperature_deviation(
 ):
     experiments = assemble_default_data(campaign_name)
     site_temp = get_qoi(
-        "Site Outdoor Air Drybulb Temperature", experiments[0].path
+        "Site Outdoor Air Drybulb Temperature", experiments[0].sql_path
     ).data_arr.squeeze()
 
     def make_data_array(exp: ComparisonData):
-        temp_data = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
+        temp_data = get_qoi("Zone Mean Air Temperature", exp.sql_path).data_arr
         afn_zone_names = get_afn_zone_names(exp.path)
         afn_filter = temp_data.space_names.isin(afn_zone_names)
         afn_data = temp_data.sel(space_names=afn_filter).mean(dim="space_names")
@@ -109,7 +109,7 @@ def get_data_for_ach(
     experiments = assemble_default_data(campaign_name)
 
     def make_data_array(exp: ComparisonData):
-        data = get_qoi("AFN Zone Ventilation Air Change Rate", exp.path).data_arr
+        data = get_qoi("AFN Zone Ventilation Air Change Rate", exp.sql_path).data_arr
         da = data.where(data > 0, drop=True).mean(dim="space_names")
         return NamedData(exp.case_name, da)
 
@@ -145,9 +145,10 @@ def get_data_for_ach(
 #     plt.show()
 #
 
-experiments = assemble_default_data("20251105_door_sched")
-exp = experiments[0]
-temp_data2 = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
+#
+# experiments = assemble_default_data("20251105_door_sched")
+# exp = experiments[0]
+# temp_data2 = get_qoi("Zone Mean Air Temperature", exp.path).data_arr
 
 
 if __name__ == "__main__":

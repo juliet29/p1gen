@@ -1,9 +1,9 @@
-from replan2eplus.ezcase.ez import EZ
+from plan2eplus.ezcase.ez import EZ
 from pathlib import Path
 from p1gen._03_execute.assemble import assemble_default_data
 from p1gen.paths import Constants
 from typing import NamedTuple
-from replan2eplus.geometry.ortho_domain import OrthoDomain
+from plan2eplus.geometry.ortho_domain import OrthoDomain
 
 
 class ZoneValues(NamedTuple):

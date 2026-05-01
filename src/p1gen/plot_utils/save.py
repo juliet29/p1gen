@@ -17,7 +17,7 @@ class ReturnsChart(Protocol):
 
 
 def make_figure_path(campaign_name: CampaignNameOptions, figure_name: FigureNames):
-    parent_path = get_or_make_folder_path(static_paths.figures, str(campaign_name))
+    parent_path = get_or_make_folder_path(static_paths.figures / str(campaign_name))
     time = create_time_string()
     suffix = ".png"
     new_name = f"{figure_name}_{time}{suffix}"

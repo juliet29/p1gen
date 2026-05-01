@@ -1,18 +1,18 @@
 from pathlib import Path
 
-from replan2eplus.campaigns.decorator2 import make_experimental_campaign
-from replan2eplus.ezcase.ez import EZ
-from replan2eplus.ops.afn.user_interface import AFNInput
-from replan2eplus.ops.constructions.interfaces import EPConstructionSet
-from replan2eplus.ops.constructions.user_interface import ConstructionInput
-from replan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
-from replan2eplus.ops.subsurfaces.interfaces import Dimension
-from replan2eplus.ops.subsurfaces.user_interfaces import (
+from plan2eplus.campaigns.decorator2 import make_experimental_campaign
+from plan2eplus.ezcase.ez import EZ
+from plan2eplus.ops.afn.user_interface import AFNInput
+from plan2eplus.ops.constructions.interfaces import EPConstructionSet
+from plan2eplus.ops.constructions.user_interface import ConstructionInput
+from plan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
+from plan2eplus.ops.subsurfaces.interfaces import Dimension
+from plan2eplus.ops.subsurfaces.user_interfaces import (
     EdgeGroup,
     SubsurfaceInputs,
 )
-from replan2eplus.ops.zones.user_interface import Room
-from replan2eplus.paths import ep_paths
+from plan2eplus.ops.zones.user_interface import Room
+from plan2eplus.paths import ep_paths
 
 from p1gen._02_generate.data_dict import campaign_data
 from p1gen._02_generate.defn_dict import campaign_defn
@@ -20,7 +20,7 @@ from p1gen._02_generate.utils import create_details
 from p1gen.paths import DynamicPaths
 from p1gen.config import WEATHER_FILE, ANALYSIS_PERIOD
 
-# from replan2eplus.ops.run_settings.defaults import default_analysis_period
+# from plan2eplus.ops.run_settings.defaults import default_analysis_period
 
 
 # TODO: the definition of "run simple ezcase has to match the data dict variables -> can this be assured?"

@@ -1,5 +1,5 @@
 from typing import Literal
-from replan2eplus.ops.constructions.interfaces import (
+from plan2eplus.ops.constructions.interfaces import (
     EPConstructionSet,
     BaseConstructionSet,
 )

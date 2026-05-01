@@ -1,7 +1,7 @@
-from replan2eplus.ops.afn.ezobject import AirflowNetwork
+from plan2eplus.ops.afn.ezobject import AirflowNetwork
 from typing import NamedTuple
-from replan2eplus.ops.subsurfaces.ezobject import Subsurface
-from replan2eplus.ops.zones.ezobject import Zone
+from plan2eplus.ops.subsurfaces.ezobject import Subsurface
+from plan2eplus.ops.zones.ezobject import Zone
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data
 from p1gen.config import CURRENT_CAMPAIGN
 from p1gen.paths import CampaignNameOptions, get_ezcase_for_path

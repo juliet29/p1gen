@@ -1,6 +1,6 @@
 import altair as alt
 import polars as pl
-from replan2eplus.ops.output.interfaces import OutputVariables
+from plan2eplus.ops.output.interfaces import OutputVariables
 
 from p1gen.paths import CampaignNameOptions
 from p1gen.plot_utils.utils import AltairRenderers

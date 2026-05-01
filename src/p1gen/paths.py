@@ -1,19 +1,17 @@
 from typing import Literal
-from replan2eplus.ezcase.ez import EZ
+from plan2eplus.ezcase.ez import EZ
 from utils4plans.paths import StaticPaths
 import pyprojroot
 from pathlib import Path
 from dataclasses import dataclass
 from utils4plans.io import read_json
-from replan2eplus.paths import load_ep_paths
-from replan2eplus.results.sql import get_sql_results
+from plan2eplus.results.sql import get_sql_results
 
 # TODO -> these go in a config .. -> only put things you want users to be able to change into a config
 
 BASE_PATH = pyprojroot.find_root(pyprojroot.has_dir(".git"))
 static_paths = StaticPaths("", BASE_PATH)  # TODO can extend static paths if like..
-ep_paths = load_ep_paths()
-ep_paths.reset_minimal_case(static_paths.inputs / "Minimal_AP.idf")
+# ep_paths.reset_minimal_case(static_paths.inputs / "Minimal_AP.idf")
 
 EXP_NAMES = Literal["case_bol_5", "case_red_b1", "case_amb_b1"]
 

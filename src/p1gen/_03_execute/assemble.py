@@ -12,6 +12,8 @@ class ComparisonData(NamedTuple):
     option: str
     # sql: SQLiteResult
     path: Path
+
+    sql_path: Path
     # ezcase: EZ
 
     @property
@@ -34,6 +36,7 @@ def assemble_default_data(campaign_name: CampaignNameOptions):
             Constants.DEFAULT_OPTION,
             # exp.sql_results,
             exp.path,
+            exp.path / "results/eplusout.sql",
             # exp.ezcase,
         )
 
@@ -57,6 +60,7 @@ def assemble_comparison_data(
                     option,
                     # exp.sql_results,
                     exp.path,
+                    exp.path / "results/eplusout.sql",
                     # exp.ezcase,
                 )
                 for category in campaign_data.modification_categories
@@ -70,6 +74,7 @@ def assemble_comparison_data(
                 exp.option,
                 # exp.sql_results,
                 exp.path,
+                exp.path / "results/eplusout.sql",
                 # exp.ezcase,
             )
         ]

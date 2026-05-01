@@ -9,7 +9,7 @@ from p1gen.paths import (
 from p1gen.main import prep_case
 from typing import Literal
 from utils4plans.io import get_or_make_folder_path
-from replan2eplus.visuals.examples import plot_zones_and_connections
+from plan2eplus.visuals.examples import plot_zones_and_connections
 
 
 def run_cases():

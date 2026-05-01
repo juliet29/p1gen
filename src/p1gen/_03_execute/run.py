@@ -1,4 +1,4 @@
-from replan2eplus.ezcase.ez import EZ
+from plan2eplus.ezcase.ez import EZ
 from rich import print
 
 from p1gen.paths import CampaignNameOptions, Constants

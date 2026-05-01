@@ -13,7 +13,7 @@ def read_plan(path_to_plan: PlanPaths):
         plan_data = Plan.model_validate({"rooms": json_data})
     except ValidationError as e:
         raise Exception(f"Plan at {path_to_plan.path_to_case} has invalid data: {e}")
-    return plan_data.replan2eplus_rooms
+    return plan_data.plan2eplus_rooms
 
 
 def read_edges(path_to_plan: PlanPaths):  # TODO wrap all in a try-catch..
@@ -28,14 +28,3 @@ def read_details(path_to_plan: PlanPaths):
     details_data = DesignDetails.model_validate(json_data)
     # print(details_data)
     return details_data
-
-
-# def prep_subsurface_inputs(path_to_plan: PlanPaths):
-#     design_details = read_details(path_to_plan)
-#     edges_data = read_edges(path_to_plan)
-#     airboundary_edges = edges_data.airboundary_edges
-#     details = design_details.details_map
-#     subsurface_edges = edges_data.true_subsurfaces_dict_as_edges
-#     map_ = edges_data.make_updated_map(design_details)
-
-#     return airboundary_edges, SubsurfaceInputs(subsurface_edges, details, map_)

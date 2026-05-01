@@ -9,8 +9,8 @@ import matplotlib.cm as cm
 from matplotlib.colors import Colormap, Normalize
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from replan2eplus.results.sql import get_qoi
-from replan2eplus.visuals.data.many_data_plot import DataPlot
+from plan2eplus.results.sql import get_qoi
+from plan2eplus.visuals.data.many_data_plot import DataPlot
 import xarray as xr
 
 from p1gen._03_execute.assemble import ComparisonData, assemble_default_data

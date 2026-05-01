@@ -11,7 +11,7 @@ def _():
     from p1gen.qois import QOI, CalcQOI, Labels, DFC
     import xarray as xr
     import polars as pl
-    from replan2eplus.results.sql import create_result_for_qoi
+    from plan2eplus.results.sql import create_result_for_qoi
     import altair as alt
     from p1gen.utils import convert_xarray_to_polars
     from p1gen.deviation import plot_deviation_cases

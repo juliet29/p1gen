@@ -1,16 +1,16 @@
-# from replan2eplus.ex.make import make_test_case
+# from plan2eplus.ex.make import make_test_case
 from pathlib import Path
 from p1gen._02_generate.utils import create_details
-from replan2eplus.ezcase.ez import EZ
-from replan2eplus.ops.afn.user_interface import AFNInput
-from replan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
-from replan2eplus.ops.subsurfaces.interfaces import Dimension
-from replan2eplus.ops.subsurfaces.user_interfaces import (
+from plan2eplus.ezcase.ez import EZ
+from plan2eplus.ops.afn.user_interface import AFNInput
+from plan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
+from plan2eplus.ops.subsurfaces.interfaces import Dimension
+from plan2eplus.ops.subsurfaces.user_interfaces import (
     EdgeGroup,
     SubsurfaceInputs,
 )
-from replan2eplus.ops.zones.user_interface import Room
-from replan2eplus.paths import ep_paths
+from plan2eplus.ops.zones.user_interface import Room
+from plan2eplus.paths import ep_paths
 from rich import print
 
 from p1gen._02_generate.data_dict import (

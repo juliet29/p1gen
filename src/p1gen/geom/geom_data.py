@@ -4,7 +4,7 @@ from matplotlib.colors import Colormap
 import numpy as np
 import matplotlib.pyplot as plt
 import xarray as xr
-from replan2eplus.results.sql import get_qoi
+from plan2eplus.results.sql import get_qoi
 from p1gen.paths import CampaignNameOptions
 import matplotlib.cm as cm
 from p1gen.plot_utils.utils import NamedData

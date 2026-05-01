@@ -1,4 +1,4 @@
-from replan2eplus.campaigns.decorator2 import DefinitionDict, Variable, Option
+from plan2eplus.campaigns.decorator2 import DefinitionDict, Variable, Option
 
 campaign_defn = DefinitionDict(
     case_names=["A", "B", "C"],

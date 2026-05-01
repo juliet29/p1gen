@@ -3,8 +3,8 @@ from typing import Callable, get_args
 import altair as alt
 import polars as pl
 import xarray as xr
-from replan2eplus.ezcase.ez import EZ
-from replan2eplus.results.sql import (
+from plan2eplus.ezcase.ez import EZ
+from plan2eplus.results.sql import (
     SQLiteResult,
     create_result_for_qoi,
 )

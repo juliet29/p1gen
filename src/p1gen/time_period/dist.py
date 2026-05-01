@@ -123,8 +123,9 @@ def pressures_plot(data: QOIData):
 @save_figure(CURRENT_CAMPAIGN, "box_vent", DEBUG_FIGURES)
 def vent_plot(data: QOIData):
     c1 = plot_qoi_box(data.flow, "Space-Averaged Flow Rate [m3/s]")
-    c2 = plot_qoi_box(data.ach, "Air Changes / Hour ")
-    return c1 | c2
+    return c1
+    # c2 = plot_qoi_box(data.ach, "Air Changes / Hour ")
+    # return c1 | c2
 
 
 @save_figure(CURRENT_CAMPAIGN, "box_temp", DEBUG_FIGURES)
@@ -136,9 +137,9 @@ def temp_plot(data: QOIData):
 
 def make_box_charts():
     data = get_day_night_data()
-    pressures_plot(data)
+    # pressures_plot(data)
     vent_plot(data)
-    temp_plot(data)
+    # temp_plot(data)
 
 
 if __name__ == "__main__":

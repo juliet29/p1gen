@@ -2,9 +2,9 @@
 from pydantic import BaseModel, Field
 
 # TODO these need to be brought up to init -> EZcase and the things for defining it
-from replan2eplus.ops.zones.user_interface import Room
-from replan2eplus.geometry.domain import Domain
-from replan2eplus.geometry.range import Range
+from plan2eplus.ops.zones.user_interface import Room
+from plan2eplus.geometry.domain import Domain
+from plan2eplus.geometry.range import Range
 
 
 HEIGHT = 3.05  # TODO read from config!
@@ -20,7 +20,7 @@ class RoomInPlan(BaseModel):
     color: str = Field(default="")
 
     @property
-    def as_replan2eplus_room(self):
+    def as_plan2eplus_room(self):
         horz_range = Range(self.left, self.left + self.width)
         vert_range = Range(self.top - self.height, self.top)
         domain = Domain(horz_range, vert_range)
@@ -31,7 +31,7 @@ class Plan(BaseModel):  # this should come from svg2plan
     rooms: list[RoomInPlan]
 
     @property
-    def replan2eplus_rooms(self):
-        return [i.as_replan2eplus_room for i in self.rooms]
+    def plan2eplus_rooms(self):
+        return [i.as_plan2eplus_room for i in self.rooms]
 
     # as subsurface inputs..

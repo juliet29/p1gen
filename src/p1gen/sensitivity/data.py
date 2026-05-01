@@ -1,4 +1,4 @@
-from replan2eplus.results.sql import (
+from plan2eplus.results.sql import (
     create_result_for_qoi,
 )
 from utils4plans.io import check_folder_exists_and_return, get_or_make_folder_path
@@ -7,7 +7,7 @@ from p1gen.config import CURRENT_CAMPAIGN
 from p1gen.paths import CampaignNameOptions, get_sqlite_object
 from p1gen._03_execute.assemble import assemble_comparison_data
 from typing import NamedTuple
-from replan2eplus.ops.output.interfaces import OutputVariables
+from plan2eplus.ops.output.interfaces import OutputVariables
 import polars as pl
 from p1gen._03_execute.zone_size import get_afn_zone_names
 

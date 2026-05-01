@@ -1,9 +1,9 @@
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
-from replan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
-from replan2eplus.ops.subsurfaces.interfaces import Dimension, Location
-from replan2eplus.ops.subsurfaces.user_interfaces import Detail, EdgeGroup
+from plan2eplus.ops.subsurfaces.ezobject import Edge as ReplanEdge
+from plan2eplus.ops.subsurfaces.interfaces import Dimension, Location
+from plan2eplus.ops.subsurfaces.user_interfaces import Detail, EdgeGroup
 from utils4plans.sets import set_difference
 
 
@@ -74,7 +74,7 @@ class Edge(BaseModel):
 
     details: DetailsForLinks  # Tyoped dict
     source: str
-    target: str  # TODO -> can we validate against existing rooms? # maybe have separate function, and this happens in replan2eplus..
+    target: str  # TODO -> can we validate against existing rooms? # maybe have separate function, and this happens in plan2eplus..
 
     @property
     def replan_edge(self):
